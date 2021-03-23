@@ -8,7 +8,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title class="titulo_projeto_title">Carregando...</title>
-	<link rel="shortcut icon" href="./img/favicon.ico" type="image/x-icon">
+	<link rel="shortcut icon" href="../img/favicon.ico" type="image/x-icon">
 	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 	<!-- START_LIB_HEAD -->
 	<link rel="stylesheet" href="../biblioteca/bower_components/bootstrap/dist/css/bootstrap.min.css">
@@ -166,7 +166,9 @@
 		var usuario_Global = JSON.parse(localStorage.getItem('usuario'));
 
 		$(document).ready(function() { 
-			updateLibs();
+			importLib("../js/resolvConfig.full.js");
+			importLib("../script.js");
+			preInit();
 		});
 
 		function logoff() { 
@@ -179,27 +181,19 @@
 			ajax({
 				param: { 'updateUser': true },
 				done: function(data) { 
-					console.log(data);
 					data = JSON.parse(data);
-					console.log(data);
-					if (data.debug == 'NO_VALID') { 
-						var usuario_Global = JSON.parse(localStorage.getItem('usuario'));
-					} else if (data.debug == 'OK') { 
-						var usuario_Global = data;
+					if (data.debug == 'OK') { 
+						usuario_Global = data;
 						localStorage.setItem('usuario', JSON.stringify(usuario_Global));
-					} else {
-						alert(data.debug);
+					} else if (data.debug != 'NO_VALID') { 
+						alert(data.debug, { icon: 'info' });
 						localStorage.removeItem('usuario');
-						window.location.assign('../');
+						setTimeout(function() { 
+							window.location.assign('../');
+						}, 2000);
 					}
 				}
 			});
-		}
-
-		function updateLibs() { 
-			importLib("../js/resolvConfig.full.js");
-			importLib("../script.js");
-			preInit();
 		}
 
 		function preInit() { 
@@ -207,14 +201,9 @@
 				window['objParamGrade_Global'] != undefined && 
 				window['ajax'] != undefined
 			) { 
-				$("#styleAdicional").html(""
-					+ 	"<style>"
-					+ 		"tr:hover > .celB{background-color: "+objParamGrade_Global.hoverTrTableColor+" !important;}"
-					+ 	"</style>"
-				);
 				initComponet();
 			} else { 
-				setTimeout(() => { preInit(); }, 10);
+				setTimeout(function() { preInit(); }, 10);
 			}
 		}
 
@@ -238,15 +227,6 @@
 				client.send();
 			});
 		}
-	</script>
-
-	<div id="styleAdicional"></div>
-	<script>
-		$("#styleAdicional").html(""
-			+ 	"<style>"
-			+ 		"tr:hover > .celB{background-color: "+objParamGrade_Global.hoverTrTableColor+" !important;}"
-			+ 	"</style>"
-		);
 	</script>
 </body>
 

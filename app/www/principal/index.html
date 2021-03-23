@@ -139,12 +139,6 @@ function preInit() {
 		window['ajax'] != undefined && 
 		window['app'] != undefined
 	) { 
-		$("#styleAdicional").html(""
-		// + 	"<script type=\"text/javascript\" src=\"cordova.js\"></"+"script>"
-			+ 	"<style>"
-			+ 		"tr:hover > .celB{background-color: "+objParamGrade_Global.hoverTrTableColor+" !important;}"
-			+ 	"</style>"
-		);
 		app.initialize();
 		initComponet();
 	} else { 

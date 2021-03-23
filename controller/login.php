@@ -99,8 +99,9 @@ if (!empty($_POST['loginSystem']) && !empty($_POST['login']) && !empty($_POST['s
 	$sql = "SELECT 
 				USUARIO.ID_USUARIO
 				, USUARIO.NOME_CONTA AS NOME
+				, USUARIO.FOTO_USUARIO
 				, '$hashIdtentificacao' AS HASH
-			FROM USUARIO
+			FROM 	USUARIO
 			WHERE 	USUARIO.EMAIL 		= '$login'
 			AND 	USUARIO.SENHA 		= '$senha'
 			AND 	USUARIO.CK_INATIVO 	= 0";

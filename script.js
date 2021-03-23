@@ -166,13 +166,14 @@ function ajaxExecute(option) {
 		processAjax_Global = false;
 		data = data.replace(//g, '');
 
-		if (typeof(option.done) == 'function') { 
+		if ((option.consoleLog || '') != '') { 
 			console.log('option.param');
 			console.log(option.param);
+		}
+
+		if (typeof(option.done) == 'function') { 
 			option.done(data, option.param);
 		} else { 
-			console.log('option.param');
-			console.log(option.param);
 			eval(option.done);
 		}
 	});
@@ -617,6 +618,9 @@ function initComponet() {
 		+ 	`</div>`
 		+ `</div>`
 	);
+
+	if ((usuario_Global.FOTO_USUARIO || '') != '') 
+		$(".foto-user").attr('src', '../img/pefil/' + usuario_Global.FOTO_USUARIO);
 
 	// $(".foto-user").attr("src","../img/perfil/" + JSON.parse(localStorage.getItem('usuario')).ID_USUARIO + ".png");
 	// $(".btn-logoff").attr('onclick', function(){ logoff(); });

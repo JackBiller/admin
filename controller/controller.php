@@ -156,6 +156,20 @@ if (!empty($_POST['doneSendBase64'])) {
 	$ext 			= $_POST['ext'];
 	$arrayExtText 	= array('txt','csv');
 
+	if (!empty($_POST['fotoPerfil'])) { 
+		if (!empty($_POST['fotoOld'])) { 
+			deleteFile($path.$_POST['fotoOld'].'.'.$ext);
+		}
+
+		$fileName = hash('md5', date('YmdHis').rand(10,99));
+
+		$sql = "UPDATE 	USUARIO
+				SET 	FOTO_USUARIO 	= '$fileName.$ext'
+				WHERE 	ID_USUARIO 		= $id_usuario";
+		// printQuery($sql);
+		padraoExecute($pdo, $sql, '');
+	}
+
 	$arquivo = fopen('./temp/'.$tempName, "r") or die("Unable to open file!");
 	$ctx = fread($arquivo, filesize('./temp/'.$tempName));
 	fclose($arquivo);
@@ -166,7 +180,7 @@ if (!empty($_POST['doneSendBase64'])) {
 	if (empty($_POST['no_base64'])) { 
 		if (in_array(strtolower($ext), $arrayExtText)) { 
 			fwrite($arquivo2, utf8_encode(base64_decode($ctx)));
-		} else {
+		} else { 
 			fwrite($arquivo2, base64_decode($ctx));
 		}
 	} else { 
@@ -175,9 +189,13 @@ if (!empty($_POST['doneSendBase64'])) {
 	fclose($arquivo2);
 
 	$file = './temp/'.$tempName;
- 	if (is_file($file)) unlink($file);
+	if (is_file($file)) unlink($file);
 
-	echo '1';
+	if (!empty($_POST['fotoPerfil'])) { 
+		echo "$fileName.$ext";
+	} else { 
+		echo '1';
+	}
 }
 /* End: Enviar arquivo via base64 */
 
