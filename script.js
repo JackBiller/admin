@@ -225,28 +225,6 @@ function paramCapitalize(descricao) {
 	return descricao;
 }
 
-function tirarAcentuacao(texto) { 
-	var chars = [
-		'áàãäâÃÂÁÀÄéèëêÉÈËÊíìïîÍÌÏÎóòôõöÕÔÓÒÖúùüûÚÙÜÛýÿÝñÑçÇ°º¹²³ÅÂž¡ËØŽƒ‰ŠÐ×—ß÷',
-		'aaaaaAAAAAeeeeEEEEiiiiIIIIoooooOOOOOuuuuuuuuyyYnNcCoo123AAziEOZF%SDX-B/'
-	]
-	var char3 = '§´ª£¢¬¤¬©¨«°†¹®¶¢¼©€®’½µ¶¢™“¼„¢“¿±˜þ¾¯•‡„«';
-
-	for (var i = 0; i < chars[0].length; i++) 
-		texto = texto.replace( new RegExp(chars[0][i], 'g'), chars[1][i] );
-
-	for (var i = 0; i < char3.length; i++) 
-		texto = texto.replace( new RegExp(char3[i], 'g'), '' );
-
-	texto = texto.replace(/œ/g, "AE");
-	texto = texto.replace(/æ/g, "AE");
-	texto = texto.replace(/Æ/g, "AE");
-	texto = texto.replace(/™/g, "TM");
-	texto = texto.replace(/…/g, "...");
-
-	return texto;
-}
-
 function valorPorExtenso(valor) { 
 	// Define as partes do valor por extenso
 	var extenso = [];
@@ -620,7 +598,7 @@ function initComponet() {
 	);
 
 	if ((usuario_Global.FOTO_USUARIO || '') != '') 
-		$(".foto-user").attr('src', '../img/pefil/' + usuario_Global.FOTO_USUARIO);
+		$(".foto-user").attr('src', '../img/perfil/' + usuario_Global.FOTO_USUARIO);
 
 	// $(".foto-user").attr("src","../img/perfil/" + JSON.parse(localStorage.getItem('usuario')).ID_USUARIO + ".png");
 	// $(".btn-logoff").attr('onclick', function(){ logoff(); });
