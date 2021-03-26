@@ -456,7 +456,8 @@ setTimeout(function() {
 				showHideTransition: options.animation || 'slide',
 				icon: options.icon || 'warning',
 				position: options.position || "bottom-right",
-				loaderBg: options.loaderBg || loaderBg_Global
+				loaderBg: options.loaderBg || loaderBg_Global,
+				hideAfter: options.time || 2500
 			});
 		} catch(e) { 
 			// console.error(e);
