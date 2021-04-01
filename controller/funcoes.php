@@ -7,14 +7,8 @@ use PHPMailer\PHPMailer\Exception;
 class Conexao { 
 	private static $conexao = null;
 	public $db_driver;
-	public $path = "../config.env";
 
-	function __construct($path="../config.env") { 
-		$this->path 		= $path;
-		// var_dump($path);
-		// echo file_get_contents($this->path);
-		$config 			= json_decode(file_get_contents($this->path));
-		// var_dump($config);
+	function __construct($config) { 
 		$db_host 			= $config->db_host;
 		$db_nome 			= $config->db_nome;
 		$db_usuario 		= $config->db_usuario;
@@ -96,7 +90,7 @@ class PadraoObjeto {
 		if (gettype($this->$nome_campo) == "array") array_push($this->$nome_campo, $valor);
 	}
 
-	public function removeQuebra($tipo, $valor){
+	public function removeQuebra($tipo, $valor) { 
 							$valor = 	str_replace("\"", '\'',
 										str_replace("\r", '', $valor));
 		if($tipo == 'html') return 		str_replace("\t", '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
@@ -105,7 +99,7 @@ class PadraoObjeto {
 										str_replace("\n", '', $valor));
 	}
 
-	public function setOptions($option = array()) { 
+	public function setOptions($option=array()) { 
 		foreach ($option as $key => $value) { 
 			$this->$key = $value;
 		}
@@ -140,8 +134,11 @@ class Generico extends PadraoObjeto {
 	}
 }
 
-function getConection($path='../config.env') { 
-	$conn = new Conexao($path);
+function getConection($config=null) { 
+	if ($config == null) 
+		$config = json_decode(ctxFile('../config.env'));
+
+	$conn = new Conexao($config);
 	return $conn->Connect();
 }
 
@@ -403,11 +400,22 @@ class Email extends PadraoObjeto {
 	var $nameFrom;
 	var $emailAddress;
 	var $nameAddress;
-	var $subject = '';
-	var $body = '';
-	var $altBody = '';
-	var $debug = false;
-	var $imgs = array();
+	var $subject='';
+	var $body='';
+	var $altBody='';
+	var $imgs=array();
+	var $debug=false;
+
+	function __construct($options=array()) { 
+		$this->setOptions($options);
+	}
+}
+
+function setParamBody($body, $params=array()) { 
+	foreach ($params as $key => $value) {
+		$body = str_replace($key, $value, $body);
+	} 
+	return $body;
 }
 
 function enviarEmail($email) { 

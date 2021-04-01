@@ -359,7 +359,7 @@ function confirmModal(options) {
 	});
 }
 
-function openModal(options) { 
+function openModal(options={}) { 
 	/*
 		options: {
 			head: '' 				-- Cabeçario do modal
