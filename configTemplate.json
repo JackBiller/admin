@@ -25,6 +25,22 @@
 		"color-app": "black",
 		"color-teste_menu": "black",
 		"color-nome_usuario": "#888888",
+		"style": { 
+			"theme": "black",
+			"menu": { 
+				"color": "#b8c7ce",
+				"background": "#222d32",
+				"hover": "#1e282c"
+			},
+			"menu_principal": { 
+				"color": "#4b646f",
+				"background": "#1a2226"
+			},
+			"sub_menu": { 
+				"color": "#8aa4af",
+				"background": "#274856"
+			}
+		},
 		"foot": { 
 			"developer": "Developer"
 		},
