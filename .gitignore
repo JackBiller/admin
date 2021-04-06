@@ -11,6 +11,7 @@ logo.png
 form.js
 form.php
 _skin-custom.css
+composer.lock
 
 /controller/config/
 /controller/ClassSQL/
