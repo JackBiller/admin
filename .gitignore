@@ -12,6 +12,7 @@ form.js
 form.php
 _skin-custom.css
 composer.lock
+composer.json
 
 /controller/config/
 /controller/ClassSQL/
