@@ -2,12 +2,13 @@
 
 date_default_timezone_set('America/Sao_Paulo');
 
-include "funcoes.php";
+include "./constConfig.php";
+include "./funcoes.php";
 $pdo = getConection();
 
 if (is_file('./ClassSQL/classSQL.php')) include './ClassSQL/classSQL.php';
 
-$config = json_decode(file_get_contents('../config.json'));
+$config = json_decode(CONFIG_JSON);
 $inativo = !empty($config->login->login_ckInativo) ? $config->login->login_ckInativo : '';
 
 // if (!empty($_POST['HASH'])) { 
@@ -129,7 +130,15 @@ if (!empty($_POST['getMenu'])) {
 if (!empty($_POST['loadView'])) { 
 	$view = $_POST['view'];
 	if (!empty($_POST['isApp']) && $view == "main") $view = 'mainApp';
-	echo file_get_contents('../view/' . $view . '.html');
+	$ctsView = file_get_contents('../view/' . $view . '.' . EXT_VIEW);
+
+	if (EXT_VIEW == 'php') { 
+		$ctsView = explode("\n", $ctsView);
+		$ctsView = array_splice($ctsView, 1, sizeof($ctsView));
+		$ctsView = implode("\n", $ctsView);
+	}
+
+	echo $ctsView;
 }
 
 if (!empty($_POST['dataFile'])) { 

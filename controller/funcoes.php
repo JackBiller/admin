@@ -136,7 +136,7 @@ class Generico extends PadraoObjeto {
 
 function getConection($config=null) { 
 	if ($config == null) 
-		$config = json_decode(ctxFile('../config.env'));
+		$config = json_decode(CONFIG_ENV);
 
 	$conn = new Conexao($config);
 	return $conn->Connect();

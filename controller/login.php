@@ -9,13 +9,14 @@ date_default_timezone_set('America/Sao_Paulo');
 // Load Composer's autoloader
 require '../vendor/autoload.php';
 
-include "funcoes.php";
+include "./constConfig.php";
+include "./funcoes.php";
 $pdo = getConection();
 
 if (is_file('./ClassSQL/classSQL.php')) include './ClassSQL/classSQL.php';
 
 if (!empty($_POST['getConfigLogin'])) { 
-	$config = json_decode(file_get_contents('../config.json'));
+	$config = json_decode(CONFIG_JSON);
 	if (!isset($config->login)) { 
 		echo '{}';
 	}
@@ -41,7 +42,7 @@ if (!empty($_POST['getConfigLogin'])) {
 }
 
 if (!empty($_POST['getConfigCadastro'])) { 
-	$config = json_decode(file_get_contents('../config.json'));
+	$config = json_decode(CONFIG_JSON);
 	if (!isset($config->cadastro)) { 
 		echo '{}';
 	}
@@ -64,7 +65,7 @@ if (!empty($_POST['getConfigCadastro'])) {
 }
 
 if (!empty($_POST['getConfigForgetPassword'])) { 
-	$config = json_decode(file_get_contents('../config.json'));
+	$config = json_decode(CONFIG_JSON);
 	if (!isset($config->forget_password)) { 
 		echo '{}';
 	}
@@ -135,7 +136,7 @@ if (!empty($_POST['passwordReset'])) {
 		return;
 	}
 
-	$configEnv = json_decode(file_get_contents('../config.env'));
+	$configEnv = json_decode(CONFIG_ENV);
 	// Instantiation and passing `true` enables exceptions
 
 	$id_usuario = $usuario->get('ID_USUARIO');

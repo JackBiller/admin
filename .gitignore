@@ -24,3 +24,5 @@ composer.json
 !configTemplate.env
 
 /vendor/
+
+/dist
