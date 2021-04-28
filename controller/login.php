@@ -1,5 +1,8 @@
 <?php
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 date_default_timezone_set('America/Sao_Paulo');
 
 // Enviar o email para redefinir a senha
@@ -92,7 +95,8 @@ if (!empty($_POST['loginSystem']) && !empty($_POST['login']) && !empty($_POST['s
 	// $senha = preg_replace('/[^[:alnum:]_]/', '', $_POST['senha']);
 	// $login = preg_replace("/[a-zA-Z0-9_-.+]+@[a-zA-Z0-9-]+.[a-zA-Z]+/", '', $_POST['login']);
 	$login = preg_replace("/[^[a-zA-Z0-9-.+@]_]+/", '', $_POST['login']);
-	$senha = preg_replace('/[^[:alnum:]_]/', '', $_POST['senha']);
+	// $senha = preg_replace('/[^[:alnum:]_]/', '', $_POST['senha']);
+	$senha = $_POST['senha'];
 
 	$senha = hash('sha224', $senha);
 	$hashIdtentificacao = hash('sha224', date('YmdHis'));
