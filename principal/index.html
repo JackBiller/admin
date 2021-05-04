@@ -3,7 +3,13 @@
 
 <head>
 	<script>
-		if (!localStorage.usuario) window.location.assign('../index.html');
+		setTimeout(function() { 
+			if (window.location.href.indexOf('http://') == 0) {
+				return window.location.assign(window.location.href.replace('http','https'));
+			}
+	
+			if (!localStorage.usuario) window.location.assign('../index.html');
+		}, 100);
 	</script>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -168,7 +174,7 @@
 		var usuario_Global = JSON.parse(localStorage.getItem('usuario'));
 
 		$(document).ready(function() { 
-			importLib("../js/resolvConfig.full.js");
+			importLib("../js/resolvConfig.min.js");
 			importLib("../script.js");
 			preInit();
 		});

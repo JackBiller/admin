@@ -2,6 +2,10 @@
 <html>
 
 <head>
+	<script>
+		if (window.location.href.indexOf('http://') == 0)
+			return window.location.assign(window.location.href.replace('http','https'));
+	</script>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>Carregando...</title>

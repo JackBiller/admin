@@ -23,6 +23,10 @@ $resultado = $resultado[0];
 <!DOCTYPE html>
 <html>
 <head>
+	<script>
+		if (window.location.href.indexOf('http://') == 0)
+			window.location.assign(window.location.href.replace('http','https'));
+	</script>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title class="titulo_projeto">Carregando...</title>
@@ -142,7 +146,7 @@ if ($resultado->get('debug') == 'OK') {
 	<script src="../biblioteca/plugins/iCheck/icheck.min.js"></script>
 	<script src="../biblioteca/bower_components/jquery-mask/jquery.mask.min.js"></script>
 	<script src="../biblioteca/bower_components/toast/jquery.toast.min.js"></script>
-	<script src="../js/resolvConfig.full.js"></script>
+	<script src="../js/resolvConfig.min.js"></script>
 	<script>
 		$(function() { 
 			$('input').iCheck({
