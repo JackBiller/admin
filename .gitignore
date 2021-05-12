@@ -13,6 +13,7 @@ form.php
 _skin-custom.css
 composer.lock
 composer.json
+/controller/upload.php
 
 /controller/config/
 /controller/ClassSQL/

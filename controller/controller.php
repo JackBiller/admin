@@ -168,19 +168,7 @@ if (!empty($_POST['doneSendBase64'])) {
 	$ext 			= $_POST['ext'];
 	$arrayExtText 	= array('txt','csv');
 
-	if (!empty($_POST['fotoPerfil'])) { 
-		if (!empty($_POST['fotoOld'])) { 
-			deleteFile($path.$_POST['fotoOld'].'.'.$ext);
-		}
-
-		$fileName = hash('md5', date('YmdHis').rand(10,99));
-
-		$sql = "UPDATE 	USUARIO
-				SET 	FOTO_USUARIO 	= '$fileName.$ext'
-				WHERE 	ID_USUARIO 		= $id_usuario";
-		// printQuery($sql);
-		padraoExecute($pdo, $sql, '');
-	}
+	if (is_file('./upload.php')) include './upload.php';
 
 	$arquivo = fopen('./temp/'.$tempName, "r") or die("Unable to open file!");
 	$ctx = fread($arquivo, filesize('./temp/'.$tempName));
