@@ -167,11 +167,11 @@ if (!empty($_POST['passwordReset'])) {
 	$link .= '/password-change/?key=' . $hashPasswordReset;
 
 	$body = require './template/password-reset.php';
-	$body = str_replace('NOME_EMPRESA'				, $configEnv->password_reset__name			, $body);
-	$body = str_replace('ENDERECO_EMPRESA'			, $configEnv->password_reset__endereco		, $body);
-	$body = str_replace('SITE_EMPRESA'				, $configEnv->password_reset__site			, $body);
-	$body = str_replace('EMAIL_CONTATO_EMPRESA'		, $configEnv->password_reset__emailContato	, $body);
-	$body = str_replace('LINK_LOGOTIPO'				, $configEnv->password_reset__linkLogotipo	, $body);
+	$body = str_replace('NOME_EMPRESA'				, $configEnv->config_email->name			, $body);
+	$body = str_replace('ENDERECO_EMPRESA'			, $configEnv->config_email->endereco		, $body);
+	$body = str_replace('SITE_EMPRESA'				, $configEnv->config_email->site			, $body);
+	$body = str_replace('EMAIL_CONTATO_EMPRESA'		, $configEnv->config_email->emailContato	, $body);
+	$body = str_replace('LINK_LOGOTIPO'				, $configEnv->config_email->linkLogotipo	, $body);
 	$body = str_replace('NOME_USUARIO'				, $usuario->get('NOME')						, $body);
 	$body = str_replace('EMAIL_USUARIO'				, $email									, $body);
 	$body = str_replace('LINK_REDEFINIR_SENHA'		, $link										, $body);
@@ -181,7 +181,7 @@ if (!empty($_POST['passwordReset'])) {
 	$mail->username 	= $configEnv->password_reset__email;
 	$mail->password 	= $configEnv->password_reset__psw;
 	$mail->isGmail 		= $configEnv->password_reset__isGmail;
-	$mail->nameFrom 	= $configEnv->password_reset__name;
+	$mail->nameFrom 	= $configEnv->config_email->name;
 	$mail->emailAddress = $email;
 	$mail->nameAddress 	= $usuario->get('NOME');
 	$mail->subject 		= 'Confirmar alteração de senha do perfil ' . $usuario->get('NOME');
