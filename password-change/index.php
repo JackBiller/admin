@@ -1,5 +1,6 @@
 <?php
 
+include '../controller/constConfig.php';
 include '../controller/funcoes.php';
 $pdo = getConection();
 
