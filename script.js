@@ -4,13 +4,13 @@
  * Se tenta criar uma perperctiva sobre mim
  * Porém eu não sou um espectativa
  * Eu sou um personagem real nesse mundo de faz de contas
- * 
+ *
  * O que disserem, do que fizeram, ofender o seu ego, é sinapcial
 */
 var isMobile_Global = false, userAgent = String(navigator.userAgent).toUpperCase(), plataformasMobile = ['ANDROID','IOS'];
 for (var i = 0; i < plataformasMobile.length; i++) if (userAgent.indexOf(plataformasMobile[i]) != -1) isMobile_Global = true;
 
-var objParamGrade_Global = { 
+var objParamGrade_Global = {
 	tamanhoFont: 12,
 	fontFamily: 'NomeDaFont',
 
@@ -39,9 +39,9 @@ var objParamGrade_Global = {
 	languageJson: 		'../js/Portuguese.json'
 }
 
-function resolvBarraBotoes() { 
+function resolvBarraBotoes() {
 	var barraBotoes = {
-		div: { 
+		div: {
 			class: 'text-right',
 			style: { 'margin-top':'5px', 'margin-right': '5px', 'margin-bottom':'4px' },
 			ctx: [
@@ -53,12 +53,12 @@ function resolvBarraBotoes() {
 				{ title: 'Anterior' 	, btn: 'info' 		, click: 'posicionarAnterior' 	, icon: 'chevron-left' 	, key: "4" },
 				{ title: 'Próximo' 		, btn: 'info' 		, click: 'posicionarProximo' 	, icon: 'chevron-right' , key: "6" },
 				{ title: 'Último' 		, btn: 'info' 		, click: 'posicionarUltimo' 	, icon: 'arrow-right' 	, key: "2" },
-			].map(function(p) { 
+			].map(function(p) {
 				var { title, btn, click, icon, key } = p
 				, 	onclick, id = 'btn' + tirarAcentuacao(title), disabled = title == 'Imprimir';
 				eval(`onclick = function() { ${click}(); }`);
 
-				return { button: { 
+				return { button: {
 					id, title, onclick, class: 'btn btn-' + btn, accesskey: key, icon: icon + ' fa-lg', disabled
 				} };
 			}),
@@ -68,12 +68,12 @@ function resolvBarraBotoes() {
 	return barraBotoes;
 }
 
-function resolvAbaMenu(array) { 
+function resolvAbaMenu(array) {
 	var html = '';
 	for (var i = 0; i < array.length; i++) {
 		html += ""
 			+ 	"<div class='col-md-3 col-sm-6 col-xs-12' data-file='" + array[i].file + "'"
-			+ 		"onclick='abrirConteudo(this, \"" + array[i].desc + "\"" 
+			+ 		"onclick='abrirConteudo(this, \"" + array[i].desc + "\""
 			+ 			(arguments.length > 1 ? "," + arguments[1] : '') + ");'"
 			+ 	">"
 			+ 		"<div class='box box-solid box-default' data-widget='box-widget'>"
@@ -91,9 +91,9 @@ function resolvAbaMenu(array) {
 	$("#conteudoAbaMenu").html(html);
 }
 
-function resolveMenu(menu) { 
+function resolveMenu(menu) {
 	var html = "", linkMenu_i;
-	for (var i = 0; i < menu.length; i++) { 
+	for (var i = 0; i < menu.length; i++) {
 		if ((menu[i].header || '') != '')
 			html += "<li class=\"header\">" + menu[i].header + "</li>"
 		else if ((menu[i].itens || '') == '')
@@ -107,7 +107,7 @@ function resolveMenu(menu) {
 				// + 			"<li><a href=\"principal.html\"><i class=\"fa fa-circle-o\"></i> Principal</a></li>"
 				// + 		"</ul>"
 				+ 	"</li>"
-		else { 
+		else {
 			linkMenu_i = ((menu[i].file || '') == '' ? '' : menu[i].file + ",") + menu[i].desc;
 
 			html += ""
@@ -119,12 +119,12 @@ function resolveMenu(menu) {
 				+ 			"</span>"
 				+ 		"</a>"
 				+ 		"<ul class=\"treeview-menu\">"
-			for (var j = 0; j < menu[i].itens.length; j++) { 
+			for (var j = 0; j < menu[i].itens.length; j++) {
 				if (
-					parseInt(usuario_Global.CK_ADMIN || 0) == 1 || 
+					parseInt(usuario_Global.CK_ADMIN || 0) == 1 ||
 					(menu[i].itens[j].admin || '') == ''
-				) { 
-					html += "" 
+				) {
+					html += ""
 						+ 	"<li>"
 						+ 		"<a href=\"#\" data-file=\"" + menu[i].itens[j].file + "\""
 						+ 			" onclick=\"abrirConteudo(this,'" + menu[i].itens[j].desc + "','" + linkMenu_i + "');\""
@@ -143,14 +143,14 @@ function resolveMenu(menu) {
 }
 
 var processAjax_Global = false;
-function ajax(option) { 
+function ajax(option) {
 	registerAjaxFunc(function() { ajaxExecute(option) });
 }
 
-function ajaxExecute(option) { 
+function ajaxExecute(option) {
 	processAjax_Global = true;
 
-	if (typeof(option.erro) == 'function') { 
+	if (typeof(option.erro) == 'function') {
 		var erro = option.erro
 	} else {
 		eval(option.erro);
@@ -162,46 +162,44 @@ function ajaxExecute(option) {
 		, dataType: (option.dataType 	|| 'text')
 		, data: 	$.extend({}, usuario_Global, (option.param || {}))
 		, error: 	erro
-	}).done(function (data) { 
+	}).done(function (data) {
 		processAjax_Global = false;
 		data = data.replace(//g, '');
 
-		if ((option.consoleLog || '') != '') { 
+		if ((option.consoleLog || '') != '') {
 			console.log('option.param');
 			console.log(option.param);
 		}
 
-		if (typeof(option.done) == 'function') { 
+		if (typeof(option.done) == 'function') {
 			option.done(data, option.param);
-		} else { 
+		} else {
 			eval(option.done);
 		}
 	});
 }
 
 var funcListFila_Global = [];
-function registerAjaxFunc(code) { 
+function registerAjaxFunc(code) {
 	funcListFila_Global.push(code);
 }
 
-function observerAjaxFunc() { 
-	if (funcListFila_Global.length > 0 && !processAjax_Global) { 
-		try { 
-			if (funcListFila_Global[0] == 'string') { 
+function observerAjaxFunc() {
+	if (funcListFila_Global.length > 0 && !processAjax_Global) {
+		try {
+			if (funcListFila_Global[0] == 'string') {
 				eval(funcListFila_Global[0]);
 			} else {
 				var func = funcListFila_Global[0];
 				func();
 			}
-		} catch(e) { 
-			console.error(e);
-		}
+		} catch(e) { console.error(e); }
 		funcListFila_Global.splice(0,1);
 	}
 }
 setInterval(function() { observerAjaxFunc(); }, 100);
 
-function mudarPagina(el, divId, name, nameDiv) { 
+function mudarPagina(el, divId, name, nameDiv) {
 	var elementoMenu = document.getElementsByName(name);
 	var elementoContMenu = document.getElementsByName(nameDiv);
 	for (var i = 0; i < elementoMenu.length; i++) {
@@ -212,12 +210,12 @@ function mudarPagina(el, divId, name, nameDiv) {
 	$("#" + divId)[0].style.display = "block";
 }
 
-function capitalize(s) { 
+function capitalize(s) {
 	if (typeof s !== 'string') return ''
 	return s.charAt(0).toUpperCase() + s.slice(1)
 }
 
-function paramCapitalize(descricao) { 
+function paramCapitalize(descricao) {
 	descricao = tirarAcentuacao((descricao || '')).toLowerCase().replace(/ /g , "_").replace(/-/g, "");
 	descricao = descricao.split('');
 	descricao[0] = descricao[0].toUpperCase();
@@ -225,7 +223,7 @@ function paramCapitalize(descricao) {
 	return descricao;
 }
 
-function valorPorExtenso(valor) { 
+function valorPorExtenso(valor) {
 	// Define as partes do valor por extenso
 	var extenso = [];
 
@@ -273,17 +271,17 @@ function valorPorExtenso(valor) {
 		bilhao 	= 	1000000000,
 		milhao 	= 	1000000;
 
-	function getCentena(restante) { 
+	function getCentena(restante) {
 		var retorno = '';
 
-		if (restante >= 100) { 
+		if (restante >= 100) {
 			var milhas = Math.trunc(restante / 100) * 100
 			restante = restante - milhas;
 			retorno += (retorno == '' ? '' : ' ') + (milhas === 1 ? 'cento' : extenso[milhas]);
 			if (restante > 0) retorno += ' e';
 		}
 
-		if (restante >= 10) { 
+		if (restante >= 10) {
 			var milhas;
 				 if (restante >= 20) milhas = Math.trunc(restante / 10) * 10;
 			else if (restante <  19) milhas = restante;
@@ -292,7 +290,7 @@ function valorPorExtenso(valor) {
 			if (restante > 0) retorno += ' e';
 		}
 
-		if (restante >= 1) { 
+		if (restante >= 1) {
 			var milhas = Math.trunc(restante / 1)
 			restante = restante - milhas;
 			retorno += (retorno == '' ? '' : ' ') + extenso[milhas];
@@ -302,9 +300,9 @@ function valorPorExtenso(valor) {
 	}
 
 	var test;
-	['tri','bi','mi'].forEach(function(pre) { 
+	['tri','bi','mi'].forEach(function(pre) {
 		eval(`test = ${pre}lhao`);
-		if (restante >= test) { 
+		if (restante >= test) {
 			var tests = Math.trunc(restante / test) ;
 			restante = restante - (tests * test);
 			retorno += tests > 1 ? getCentena(tests) + ` ${pre}lhões` : extenso[tests] + ` ${pre}lhão`;
@@ -312,7 +310,7 @@ function valorPorExtenso(valor) {
 		}
 	});
 
-	if (restante >= 1000) { 
+	if (restante >= 1000) {
 		var milhas = Math.trunc(restante / 1000)
 		restante = restante - (milhas * 1000);
 		retorno += getCentena(milhas) + ' mil';
@@ -322,11 +320,11 @@ function valorPorExtenso(valor) {
 	return retorno;
 }
 
-function getRndInteger(min, max) { 
+function getRndInteger(min, max) {
 	return Math.floor(Math.random() * (max - min + 1) ) + min;
 }
 
-function confirmModal(options) { 
+function confirmModal(options) {
 	/*
 		options: {
 			msm: '' 				-- Mensagem a ser mostrada na tela
@@ -349,7 +347,7 @@ function confirmModal(options) {
 	openModal({
 		head: options.msm,
 		foot: resolvConfig({
-			button: { 
+			button: {
 				  desc: 	(options.btnDesc 	|| 'Confirmar')
 				, icon: 	(options.btnIcon 	|| 'check')
 				, class: 	'btn btn-' + (options.btnClass || 'success')
@@ -359,7 +357,7 @@ function confirmModal(options) {
 	});
 }
 
-function openModal(options={}) { 
+function openModal(options={}) {
 	/*
 		options: {
 			head: '' 				-- Cabeçario do modal
@@ -377,9 +375,9 @@ function openModal(options={}) {
 		.css('display',((options.body || '') == '' ? 'none' : 'block'));
 	$("#modalFootGenerico").html((options.foot || ''));
 
-	if ($('#modalGenerico').is(':visible')) { 
+	if ($('#modalGenerico').is(':visible')) {
 		(options.onOpen || function() { $("#modalCloseGenerico")[0].focus(); })()
-	} else { 
+	} else {
 		$("#modalGenerico").on('shown.bs.modal', function() { onOpenModal(); });
 		onOpenModal = (options.onOpen || function() { $("#modalCloseGenerico")[0].focus(); });
 
@@ -389,11 +387,11 @@ function openModal(options={}) {
 function onOpenModal() { }
 function onCloseModal() { }
 
-function closeModal() { 
+function closeModal() {
 	$("#modalGenerico").modal('hide');
 }
 
-function time2Int(time) { 
+function time2Int(time) {
 	if ((time || '') == '') time =  '00:00:00';
 	time = time.split(':');
 	var horas 	= parseInt(time[0]);
@@ -402,7 +400,7 @@ function time2Int(time) {
 	return (horas * 3600) + (minuto * 60) + segundo;
 }
 
-function int2Time(value, rmDescimal=false) { 
+function int2Time(value, rmDescimal=false) {
 	var horas = 0, minutos = 0, segundos = 0
 
 	if (value >= 3600) {
@@ -425,17 +423,17 @@ function int2Time(value, rmDescimal=false) {
 	return result;
 }
 
-function orderArray(array, param='', paramSecond='') { 
+function orderArray(array, param='', paramSecond='') {
 	var dataTemp, verify;
-	var paramE = param == '' 
-		? 'array[i] < array[j]' 
+	var paramE = param == ''
+		? 'array[i] < array[j]'
 		: `array[i]["${param}"] < array[j]["${paramSecond == '' ? param : paramSecond}"]`;
 
 	for (var i = 0; i < array.length; i++) {
 		for (var j = 0; j < array.length; j++) {
 			eval(`verify = ${paramE}`);
 
-			if (verify) { 
+			if (verify) {
 				dataTemp = array[i];
 				array[i] = array[j];
 				array[j] = dataTemp;
@@ -447,8 +445,8 @@ function orderArray(array, param='', paramSecond='') {
 
 var loaderBg_Global = '#11ACED';
 var alertOld = alert;
-setTimeout(function() { 
-	alert = function(text, options={}) { 
+setTimeout(function() {
+	alert = function(text, options={}) {
 		try {
 			$.toast({
 				heading: options.head || $(".titulo_pagina").html() || 'Aviso',
@@ -459,7 +457,7 @@ setTimeout(function() {
 				loaderBg: options.loaderBg || loaderBg_Global,
 				hideAfter: options.time || 2500
 			});
-		} catch(e) { 
+		} catch(e) {
 			// console.error(e);
 			alertOld(text);
 		}
@@ -470,11 +468,11 @@ setTimeout(function() {
 /** Operações Aplicação */
 /**************************************************/
 var paginaAtual_Global = '';
-function abrirConteudo(el, titulo) { 
+function abrirConteudo(el, titulo) {
 	$(".titulo_pagina").html(titulo);
 	var arg = arguments;
 
-	if (titulo == 'Principal') { 
+	if (titulo == 'Principal') {
 		$(".breadcrumb").html(""
 			+ "<li class='active'>Principal</li>"
 		)
@@ -482,7 +480,7 @@ function abrirConteudo(el, titulo) {
 		$(".breadcrumb").html(""
 			+ "<li><a href='#' data-file='main' onclick='abrirConteudo(this, \"Principal\")'>Principal</a></li>"
 			+ (arg.length < 2 ? '' : ""
-				+ (function(args) { 
+				+ (function(args) {
 					var html = '';
 					for (var i = args.length-1; i >= 2; i--) {
 						html += ""
@@ -491,9 +489,9 @@ function abrirConteudo(el, titulo) {
 								+ 	"<a href='#' data-file='" + args[i].split(',')[0] + "'"
 								+ 		" onclick='abrirConteudo(this,\"" + args[i].split(',')[1] + "\""
 								+ (i == 2 ? '' : ","
-									+ (function(argsI, i) { 
+									+ (function(argsI, i) {
 										var htmlI = '';
-										for (var j = i; j >= 2; j--) 
+										for (var j = i; j >= 2; j--)
 											htmlI += (htmlI == '' ? '' : ',') + "\"" + argsI[j] + "\"";
 										return htmlI;
 									}(args,(i-1)))
@@ -518,7 +516,7 @@ function abrirConteudo(el, titulo) {
 
 	if (["SuSE","Android","iOS","Windows Phone"].indexOf(platform.os.family) >= 0 &&
 		$("body").attr('class').indexOf('sidebar-open') >= 0
-	) { 
+	) {
 		$(".sidebar-toggle")[0].click();
 	}
 
@@ -528,10 +526,10 @@ function abrirConteudo(el, titulo) {
 			+ '<script>resolvImg();</'+'script>'
 		);
 	};
-	var view = $(el).data('file'); 
+	var view = $(el).data('file');
 	paginaAtual_Global = view;
 
-	if ((window['isApp_Global'] || '') != '') { 
+	if ((window['isApp_Global'] || '') != '') {
 		getCtx(`${caminhoRequisicao}view/${view}.html`, view, done);
 	} else {
 		ajax({ // Carregar paginas da aplicação
@@ -541,23 +539,23 @@ function abrirConteudo(el, titulo) {
 	}
 }
 
-function resolvImg() { 
+function resolvImg() {
 	var imgs = $('#conteudo_pagina').find("img");
-	for (var i = 0; i < imgs.length; i++) { 
-		imgs[i].onerror = function() { 
-			if (this.src != 'error.jpg' && $(this).attr('src').indexOf(caminhoRequisicao) < 0) 
+	for (var i = 0; i < imgs.length; i++) {
+		imgs[i].onerror = function() {
+			if (this.src != 'error.jpg' && $(this).attr('src').indexOf(caminhoRequisicao) < 0)
 				this.src = ($(this).attr('src') || '').replace('../', caminhoRequisicao);
 		}
 	}
 }
 
-function logoff() { 
+function logoff() {
 	if (!confirm('Deseja sair da aplicação?')) return false;
 	localStorage.removeItem('usuario');
 	window.location.assign('../index.html');
 }
 
-function initComponet() { 
+function initComponet() {
 	$("body").append(
 		'<style>'
 			+'h1 {'
@@ -598,7 +596,7 @@ function initComponet() {
 		+ `</div>`
 	);
 
-	if ((usuario_Global.FOTO_USUARIO || '') != '') 
+	if ((usuario_Global.FOTO_USUARIO || '') != '')
 		$(".foto-user").attr('src', '../img/perfil/' + usuario_Global.FOTO_USUARIO);
 
 	// $(".foto-user").attr("src","../img/perfil/" + JSON.parse(localStorage.getItem('usuario')).ID_USUARIO + ".png");
@@ -610,9 +608,9 @@ function initComponet() {
 	abrirConteudo($(document.createElement('span')).attr('data-file','main'),'Principal');
 
 
-	var configPrincipal = { 
+	var configPrincipal = {
 		param: { 'getConfigPrincipal': true },
-		done: function(data) { 
+		done: function(data) {
 			console.log(data);
 			data = JSON.parse(data);
 			console.log(data);
@@ -643,9 +641,9 @@ function initComponet() {
 		}
 	}
 
-	var menu = { 
+	var menu = {
 		param: { 'getMenu': true },
-		done: function(dataMenu) { 
+		done: function(dataMenu) {
 			console.log(dataMenu);
 			dataMenu = JSON.parse(dataMenu);
 			console.log(dataMenu);
@@ -653,7 +651,7 @@ function initComponet() {
 		}
 	}
 
-	if ((window['isApp_Global'] || '') != '') { 
+	if ((window['isApp_Global'] || '') != '') {
 		getCtx(configPrincipal.param, 'configPrincipal', configPrincipal.done);
 		getCtx(menu.param, 'menu', menu.done);
 
@@ -665,8 +663,18 @@ function initComponet() {
 			.html($(".main-footer").html().replace(' Todos os direitos reservados.',''));
 		$("#developerFoot").css('color','#5bc0de');
 		// initApp();
-	} else { 
+	} else {
 		ajax(configPrincipal);
 		ajax(menu);
 	}
+}
+
+function mensagemSave(data, msmSuccess, callBack, callBackSuccess=function(){}) {
+	if (data != '0' && !isNaN(data)) {
+		alert(msmSuccess, { icon: 'success' });
+		callBackSuccess();
+	} else {
+		alert('Falha: ' + data, { icon: 'error' });
+	}
+	callBack();
 }
