@@ -170,15 +170,23 @@ if (!empty($_POST['passwordReset'])) {
 	$body = str_replace('NOME_EMPRESA'				, $configEnv->config_email->name			, $body);
 	$body = str_replace('ENDERECO_EMPRESA'			, $configEnv->config_email->endereco		, $body);
 	$body = str_replace('SITE_EMPRESA'				, $configEnv->config_email->site			, $body);
+	$body = str_replace('SITE_LINK_EMPRESA'			, $configEnv->config_email->siteLink		, $body);
 	$body = str_replace('EMAIL_CONTATO_EMPRESA'		, $configEnv->config_email->emailContato	, $body);
 	$body = str_replace('LINK_LOGOTIPO'				, $configEnv->config_email->linkLogotipo	, $body);
 	$body = str_replace('NOME_USUARIO'				, $usuario->get('NOME')						, $body);
 	$body = str_replace('EMAIL_USUARIO'				, $email									, $body);
 	$body = str_replace('LINK_REDEFINIR_SENHA'		, $link										, $body);
+	$body = str_replace("\t",'' ,
+			str_replace("\n",'' ,
+			str_replace("\r",'' ,
+				$body)));
 
 	$mail = new Email();
 	$mail->host 		= $configEnv->password_reset__host;
-	$mail->username 	= $configEnv->password_reset__email;
+	$mail->username 	= isset($configEnv->password_reset__user) 
+						? $configEnv->password_reset__user
+						: $configEnv->password_reset__email;
+	$mail->emailFrom 	= $configEnv->password_reset__email;
 	$mail->password 	= $configEnv->password_reset__psw;
 	$mail->isGmail 		= $configEnv->password_reset__isGmail;
 	$mail->nameFrom 	= $configEnv->config_email->name;
@@ -186,7 +194,8 @@ if (!empty($_POST['passwordReset'])) {
 	$mail->nameAddress 	= $usuario->get('NOME');
 	$mail->subject 		= 'Confirmar alteração de senha do perfil ' . $usuario->get('NOME');
 	$mail->body 		= $body;
-	// $mail->push(array( 'logo_ref' => '../img/logo.png' ), 'imgs');
+	// $mail->debug 		= true;
+	// $mail->push(array('logo_ref' => '../img/logo.png'), 'imgs');
 
 	echo enviarEmail($mail);
 }

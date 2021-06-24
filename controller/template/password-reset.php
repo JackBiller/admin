@@ -60,10 +60,7 @@ return '<center>
 			<div style="font-family:Nunito Sans,Arial;font-size:14px;line-height:19px;text-align:left;color:#616b79">
 				Este e-mail é enviado automaticamente. 
 				Precisa de ajuda? Fale com a gente também através do 
-				<a href="http://email.upnid.com/ls/click?upn=KjBRfWAGD72uhJWnmvgtTJXnlDGQ1uDoobKv7NIWdBY-3DCf7v_UD04LZOS5lzvp7ktivCinStoghCbeh6zVaX1pBCdDX3bPY2ONQIP091L-2F-2FLnzaak9FOfLujRb-2BcnJLGKxMusRYvBYRt2WOaCRWKCYy8KSaGbju7KHf1Qy8XmL1NzLwnLfdbtbEAqsiJla3eoiRSLm5Bfld2XNCor6lZtoCOXdHeC1K5Hau8oZOI7GBrjmfde0oYc0tur4usBUOBNfe59co-2F2AApsSu8Vjov0R9HmZd0-3D"
-					rel="noopener noreferrer" target="_blank"
-					data-saferedirecturl="https://www.google.com/url?q=http://email.upnid.com/ls/click?upn%3DKjBRfWAGD72uhJWnmvgtTJXnlDGQ1uDoobKv7NIWdBY-3DCf7v_UD04LZOS5lzvp7ktivCinStoghCbeh6zVaX1pBCdDX3bPY2ONQIP091L-2F-2FLnzaak9FOfLujRb-2BcnJLGKxMusRYvBYRt2WOaCRWKCYy8KSaGbju7KHf1Qy8XmL1NzLwnLfdbtbEAqsiJla3eoiRSLm5Bfld2XNCor6lZtoCOXdHeC1K5Hau8oZOI7GBrjmfde0oYc0tur4usBUOBNfe59co-2F2AApsSu8Vjov0R9HmZd0-3D&amp;source=gmail&amp;ust=1616002002260000&amp;usg=AFQjCNFWIZiaVcwDbZtal6egOl_jAPgBHg"
-				>
+				<a href="SITE_LINK_EMPRESA" rel="noopener noreferrer" target="_blank" data-saferedirecturl="SITE_LINK_EMPRESA">
 					SITE_EMPRESA
 				</a>
 			</div>

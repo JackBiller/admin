@@ -432,7 +432,7 @@ function enviarEmail($email) {
 		$mail->Username 	= $email->username; 						// Usuário do servidor SMTP
 		$mail->Password 	= $email->password; 						// Senha do servidor SMTP
 		if ($email->isGmail) $mail->SMTPSecure 	= "ssl";
-		$mail->SetFrom($email->username, $email->nameFrom);
+		$mail->SetFrom($email->emailFrom, $email->nameFrom);
 		$mail->AddAddress($email->emailAddress, $email->nameAddress); 	// Define o remetente
 		// Configurações do corpo do e-mail
 		$mail->IsHTML(true); 											// Define que o e-mail será enviado como HTML
