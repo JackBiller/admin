@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="br.com.jackBiller.sanhidrelApp" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+<widget id="br.com.jackBiller.barbi" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <feature name="Whitelist">
         <param name="android-package" value="org.apache.cordova.whitelist.WhitelistPlugin" />
         <param name="onload" value="true" />
@@ -16,12 +16,12 @@
     <feature name="PushNotification">
         <param name="android-package" value="com.adobe.phonegap.push.PushPlugin" />
     </feature>
-    <name>Sanhidrel App</name>
+    <name>Nome App</name>
     <description>
-        Aplicativo Sanhidrel App
+        Descrição do Aplicativo
     </description>
-    <author email="jack@cdiinfo.com.br" href="http://phonegap.com">
-        Jack Biller da Silva Prado
+    <author email="teste@generico.net" href="#">
+       Autor
     </author>
     <content src="index.html" />
     <access origin="*" />
@@ -31,6 +31,8 @@
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
+    <allow-intent href="market:*" />
+    <resource-file src="google-services.json" target="app/google-services.json" />
     <icon density="ldpi" src="www/img/logo.png" />
     <icon density="mdpi" src="www/img/logo.png" />
     <icon density="hdpi" src="www/img/logo.png" />
@@ -49,11 +51,6 @@
     <splash density="port-xhdpi" src="www/img/logo.png" />
     <splash density="port-xxhdpi" src="www/img/logo.png" />
     <splash density="port-xxxhdpi" src="www/img/logo.png" />
-    <allow-intent href="market:*" />
     <preference name="loglevel" value="DEBUG" />
-    <preference name="DisallowOverscroll" value="true" />
-    <preference name="android-minSdkVersion" value="14" />
-    <preference name="StatusBarOverlaysWebView" value="false" />
-    <preference name="StatusBarBackgroundColor" value="#ee6e73" />
-    <preference name="StatusBarStyle" value="blacktranslucent" />
+    <preference name="phonegap-version" value="cli-8.0.0" />
 </widget>

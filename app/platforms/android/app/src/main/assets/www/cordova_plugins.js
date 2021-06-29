@@ -1,14 +1,6 @@
 cordova.define('cordova/plugin_list', function(require, exports, module) {
 module.exports = [
   {
-    "id": "phonegap-plugin-push.PushNotification",
-    "file": "plugins/phonegap-plugin-push/www/push.js",
-    "pluginId": "phonegap-plugin-push",
-    "clobbers": [
-      "PushNotification"
-    ]
-  },
-  {
     "id": "cordova-plugin-camera.Camera",
     "file": "plugins/cordova-plugin-camera/www/CameraConstants.js",
     "pluginId": "cordova-plugin-camera",
@@ -55,16 +47,26 @@ module.exports = [
     "clobbers": [
       "cordova.plugins.printer"
     ]
+  },
+  {
+    "id": "phonegap-plugin-push.PushNotification",
+    "file": "plugins/phonegap-plugin-push/www/push.js",
+    "pluginId": "phonegap-plugin-push",
+    "clobbers": [
+      "PushNotification"
+    ]
   }
 ];
 module.exports.metadata = 
 // TOP OF METADATA
 {
-  "phonegap-plugin-push": "1.8.4",
   "cordova-plugin-whitelist": "1.3.4",
   "cordova-plugin-camera": "4.1.0",
   "cordova-plugin-qrscanner": "3.0.1",
-  "cordova-plugin-printer": "0.8.0"
+  "cordova-plugin-printer": "0.8.0",
+  "cordova-support-google-services": "1.3.2",
+  "phonegap-plugin-multidex": "1.0.0",
+  "phonegap-plugin-push": "2.3.0"
 };
 // BOTTOM OF METADATA
 });

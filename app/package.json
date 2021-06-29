@@ -32,7 +32,11 @@
             }
         },
         "platforms": [
-            "android"
+            "android",
+            "ios"
         ]
+    },
+    "devDependencies": {
+        "cordova-ios": "~4.5.4"
     }
 }
