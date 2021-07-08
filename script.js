@@ -616,7 +616,7 @@ function initComponet() {
 			console.log(data);
 
 			$(".titulo_projeto").html(''
-				+ ((data.logo_png || '') == '' ? '' : "<img src='../img/"+data.logo_png+".png' height='40px'> ")
+				+ ((data.logo_png || '') == '' ? '' : "<img src='../img/"+data.logo_png+".png' height='30px'> ")
 				+ ((data.logo_png || '') != '' ? '' : (data.nome_projeto || ''))
 			);
 			$(".titulo_projeto_title").html((data.nome_projeto || ''));
