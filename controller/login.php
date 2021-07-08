@@ -18,79 +18,79 @@ $pdo = getConection();
 
 if (is_file('./ClassSQL/classSQL.php')) include './ClassSQL/classSQL.php';
 
-if (!empty($_POST['getConfigLogin'])) { 
+if (!empty($_POST['getConfigLogin'])) {
 	$config = json_decode(CONFIG_JSON);
-	if (!isset($config->login)) { 
+	if (!isset($config->login)) {
 		echo '{}';
 	}
 	$config->login->nome_projeto = $config->nome_projeto;
 
 	if (isset($config->colorLoadAlert)) $config->login->colorLoadAlert = $config->colorLoadAlert;
 
-	if (isset($config->cadastro)) { 
+	if (isset($config->cadastro)) {
 		$config->login->isCadastro = true;
 		$config->login->linkCadastro = isset($config->cadastro->link) ? $config->cadastro->link : 'Cadastre-se';
 	}
 
-	if (isset($config->forget_password)) { 
+	if (isset($config->forget_password)) {
 		$config->login->isForgetPassword = true;
 		$config->login->linkForgetPassword = isset($config->forget_password->link) ? $config->forget_password->link : 'Esqueceu Senha?';
 	}
 
-	if (!isset($config->login->logo_png) && isset($config->logo_png)) { 
+	if (!isset($config->login->logo_png) && isset($config->logo_png)) {
 		$config->login->logo_png = $config->logo_png;
 	}
 
 	echo json_encode($config->login);
 }
 
-if (!empty($_POST['getConfigCadastro'])) { 
+if (!empty($_POST['getConfigCadastro'])) {
 	$config = json_decode(CONFIG_JSON);
-	if (!isset($config->cadastro)) { 
+	if (!isset($config->cadastro)) {
 		echo '{}';
 	}
 	$config->cadastro->nome_projeto = $config->nome_projeto;
 
 	if (isset($config->colorLoadAlert)) $config->cadastro->colorLoadAlert = $config->colorLoadAlert;
 
-	if (isset($config->forget_password)) { 
+	if (isset($config->forget_password)) {
 		$config->cadastro->isForgetPassword = true;
 		$config->cadastro->linkForgetPassword = isset($config->forget_password->link) ? $config->forget_password->link : 'Esqueceu Senha?';
 	}
 
 	$config->cadastro->linkLogin = isset($config->login->link) ? $config->login->link : 'Fazer Login';
 
-	if (!isset($config->cadastro->logo_png) && isset($config->logo_png)) { 
+	if (!isset($config->cadastro->logo_png) && isset($config->logo_png)) {
 		$config->cadastro->logo_png = $config->logo_png;
 	}
 
 	echo json_encode($config->cadastro);
 }
 
-if (!empty($_POST['getConfigForgetPassword'])) { 
+if (!empty($_POST['getConfigForgetPassword'])) {
 	$config = json_decode(CONFIG_JSON);
-	if (!isset($config->forget_password)) { 
+	if (!isset($config->forget_password)) {
 		echo '{}';
 	}
 	$config->forget_password->nome_projeto = $config->nome_projeto;
 
 	if (isset($config->colorLoadAlert)) $config->forget_password->colorLoadAlert = $config->colorLoadAlert;
 
-	if (isset($config->cadastro)) { 
+	if (isset($config->cadastro)) {
 		$config->forget_password->isCadastro = true;
 		$config->forget_password->linkCadastro = isset($config->cadastro->link) ? $config->cadastro->link : 'Cadastre-se';
 	}
 
 	$config->forget_password->linkLogin = isset($config->login->link) ? $config->login->link : 'Fazer Login';
 
-	if (!isset($config->forget_password->logo_png) && isset($config->logo_png)) { 
+	if (!isset($config->forget_password->logo_png) && isset($config->logo_png)) {
 		$config->forget_password->logo_png = $config->logo_png;
 	}
 
 	echo json_encode($config->forget_password);
 }
 
-if (!empty($_POST['loginSystem']) && !empty($_POST['login']) && !empty($_POST['senha'])) { 
+if (!empty($_POST['loginSystem']) && !empty($_POST['login']) && !empty($_POST['senha'])) {
 	// $login = strtoupper(preg_replace('/[^[:alpha:]_]/', '', $_POST['login']));
 	// $senha = preg_replace('/[^[:alnum:]_]/', '', $_POST['senha']);
 	// $login = preg_replace("/[a-zA-Z0-9_-.+]+@[a-zA-Z0-9-]+.[a-zA-Z]+/", '', $_POST['login']);
@@ -101,7 +101,7 @@ if (!empty($_POST['loginSystem']) && !empty($_POST['login']) && !empty($_POST['s
 	$senha = hash('sha224', $senha);
 	$hashIdtentificacao = hash('sha224', date('YmdHis'));
 
-	$sql = "SELECT 
+	$sql = "SELECT
 				USUARIO.ID_USUARIO
 				, USUARIO.NOME_CONTA AS NOME
 				, USUARIO.FOTO_USUARIO
@@ -114,7 +114,7 @@ if (!empty($_POST['loginSystem']) && !empty($_POST['login']) && !empty($_POST['s
 	// printQuery($sql);
 	$usuario = padraoResultado($pdo, $sql, 'Nenhum resultado encontrado!');
 	$usuario = $usuario[0];
-	if ($usuario->get('debug') == 'OK') { 
+	if ($usuario->get('debug') == 'OK') {
 		$id_usuario = $usuario->get('ID_USUARIO');
 		$sql = "INSERT INTO USUARIO_HASH (ID_USUARIO, HASH) VALUES ($id_usuario,'$hashIdtentificacao')";
 		padraoExecute($pdo, $sql, '');
@@ -123,7 +123,7 @@ if (!empty($_POST['loginSystem']) && !empty($_POST['login']) && !empty($_POST['s
 	echo toJson(array($usuario));
 }
 
-if (!empty($_POST['passwordReset'])) { 
+if (!empty($_POST['passwordReset'])) {
 	$email = $_POST['email'];
 
 	$sql = "SELECT 	USUARIO.ID_USUARIO
@@ -135,7 +135,7 @@ if (!empty($_POST['passwordReset'])) {
 	$usuario = padraoResultado($pdo, $sql, 'E-mail inválido!');
 	$usuario = $usuario[0];
 
-	if ($usuario->get('debug') != 'OK') { 
+	if ($usuario->get('debug') != 'OK') {
 		echo toJson(array($usuario->get('debug')));
 		return;
 	}
@@ -150,18 +150,18 @@ if (!empty($_POST['passwordReset'])) {
 	// printQuery($sql);
 	padraoExecute($pdo, $sql);
 
-	// $_SERVER["HTTP_HOST"]; 				// "localhost" 
-	// $_SERVER["REQUEST_SCHEME"]; 			// "http" 
-	// $_SERVER["SCRIPT_FILENAME"]; 		// "E:/servidor/admin/controller/login.php" 
-	// $_SERVER["DOCUMENT_ROOT"]; 			// "E:/servidor" 
-	$link = $_SERVER["SCRIPT_FILENAME"]; // "E:/servidor/admin/controller/login.php" 
+	// $_SERVER["HTTP_HOST"]; 				// "localhost"
+	// $_SERVER["REQUEST_SCHEME"]; 			// "http"
+	// $_SERVER["SCRIPT_FILENAME"]; 		// "E:/servidor/admin/controller/login.php"
+	// $_SERVER["DOCUMENT_ROOT"]; 			// "E:/servidor"
+	$link = $_SERVER["SCRIPT_FILENAME"]; // "E:/servidor/admin/controller/login.php"
 	$link = explode('/', $link);
 	array_splice($link, sizeof($link)-2, 2);
 	$link = implode('/', $link);
-	// $_SERVER["REQUEST_SCHEME"] . '://' . $_SERVER["HTTP_HOST"] . ':' . $_SERVER["SERVER_PORT"], 
+	// $_SERVER["REQUEST_SCHEME"] . '://' . $_SERVER["HTTP_HOST"] . ':' . $_SERVER["SERVER_PORT"],
 	$link = str_replace(
-		$_SERVER["DOCUMENT_ROOT"], 
-		$_SERVER["REQUEST_SCHEME"] . '://' . $_SERVER["HTTP_HOST"], 
+		$_SERVER["DOCUMENT_ROOT"],
+		$_SERVER["REQUEST_SCHEME"] . '://' . $_SERVER["HTTP_HOST"],
 		$link
 	);
 	$link .= '/password-change/?key=' . $hashPasswordReset;
@@ -194,14 +194,18 @@ if (!empty($_POST['passwordReset'])) {
 	$mail->nameAddress 	= $usuario->get('NOME');
 	$mail->subject 		= 'Confirmar alteração de senha do perfil ' . $usuario->get('NOME');
 	$mail->body 		= $body;
+<<<<<<< Updated upstream
 	// $mail->debug 		= true;
 	// $mail->push(array('logo_ref' => '../img/logo.png'), 'imgs');
+=======
+	$mail->push(array('logo_ref' => '../img/email_logo.png'), 'imgs');
+>>>>>>> Stashed changes
 
 	echo enviarEmail($mail);
 }
 
-if (!empty($_POST['passwordChange'])) { 
-	if (empty($_POST['key']) || empty($_POST['senha'])) { 
+if (!empty($_POST['passwordChange'])) {
+	if (empty($_POST['key']) || empty($_POST['senha'])) {
 		echo toJson(array(new FalseDebug('Informe os dados corretamente!')));
 		return;
 	}
@@ -216,7 +220,7 @@ if (!empty($_POST['passwordChange'])) {
 	// printQuery($sql);
 	$resultado = padraoResultado($pdo, $sql, 'Nenhum resultado encontrado!');
 	$resultado = $resultado[0];
-	if ($resultado->get('debug') != 'OK') { 
+	if ($resultado->get('debug') != 'OK') {
 		echo toJson(array(new FalseDebug('Chave inválida!')));
 		return;
 	}
@@ -238,7 +242,7 @@ if (!empty($_POST['passwordChange'])) {
 	echo toJson(array(new FalseDebug('OK')));
 }
 
-if (!empty($_POST['buscarCep'])) { 
+if (!empty($_POST['buscarCep'])) {
 	$cep = $_POST['cep'];
 	echo file_get_contents("https://viacep.com.br/ws/$cep/json/");
 }
