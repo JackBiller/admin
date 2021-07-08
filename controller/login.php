@@ -194,12 +194,7 @@ if (!empty($_POST['passwordReset'])) {
 	$mail->nameAddress 	= $usuario->get('NOME');
 	$mail->subject 		= 'Confirmar alteração de senha do perfil ' . $usuario->get('NOME');
 	$mail->body 		= $body;
-<<<<<<< Updated upstream
-	// $mail->debug 		= true;
-	// $mail->push(array('logo_ref' => '../img/logo.png'), 'imgs');
-=======
 	$mail->push(array('logo_ref' => '../img/email_logo.png'), 'imgs');
->>>>>>> Stashed changes
 
 	echo enviarEmail($mail);
 }
