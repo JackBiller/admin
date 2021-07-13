@@ -392,7 +392,7 @@ function corretor($palavra) {
 /**********************************************************************************************/
 /* FUNÇÕES PARA EMAIL */
 /**********************************************************************************************/
-class Email extends PadraoObjeto { 
+class Email extends PadraoObjeto {
 	var $host;
 	var $username;
 	var $password;
@@ -406,22 +406,22 @@ class Email extends PadraoObjeto {
 	var $imgs=array();
 	var $debug=false;
 
-	function __construct($options=array()) { 
+	function __construct($options=array()) {
 		$this->setOptions($options);
 	}
 }
 
-function setParamBody($body, $params=array()) { 
+function setParamBody($body, $params=array()) {
 	foreach ($params as $key => $value) {
 		$body = str_replace($key, $value, $body);
-	} 
+	}
 	return $body;
 }
 
-function enviarEmail($email) { 
+function enviarEmail($email) {
 	require '../vendor/autoload.php';
 	$mail = new PHPMailer();
-	try { 
+	try {
 		// Define os dados do servidor e tipo de conexão
 		if ($email->debug) $mail->SMTPDebug = 1; 						// Habilita o debug na hora de enviar o email
 		$mail->IsSMTP(); 												// Define que a mensagem será SMTP
@@ -440,13 +440,13 @@ function enviarEmail($email) {
 		$mail->Subject 		= $email->subject;
 		$mail->Body 		= $email->body;
 
-		foreach ($email->imgs as $img) { 
-			foreach ($img as $key => $value) { 
+		foreach ($email->imgs as $img) {
+			foreach ($img as $key => $value) {
 				$mail->AddEmbeddedImage($value, $key);
 			}
 		}
 		return $mail->Send() ? '1' : '0';
-	} catch (Exception $e) { 
+	} catch (Exception $e) {
 		return '0';
 	}
 }
@@ -454,17 +454,17 @@ function enviarEmail($email) {
 /**********************************************************************************************/
 /* FUNÇÕES PARA ARQUIVOS E DIRETORIOS */
 /**********************************************************************************************/
-class Dir extends PadraoObjeto { 
+class Dir extends PadraoObjeto {
 	var $name;
 	var $branchs = array();
 	var $isFile = false;
 
-	function __construct($name) { 
+	function __construct($name) {
 		$this->name = $name;
 	}
 }
 
-class File extends PadraoObjeto { 
+class File extends PadraoObjeto {
 	var $name;
 	var $path;
 	var $dateCriation;
@@ -473,20 +473,20 @@ class File extends PadraoObjeto {
 	var $height;
 	var $width;
 
-	function __construct($name, $path){
+	function __construct($name, $path) {
 		$this->name = $name;
 		$this->path = $path;
 	}
 }
 
-function createFile($name, $ctx) { 
+function createFile($name, $ctx) {
 	$myfile = fopen($name, "w") or die("Unable to open file!");
 	fwrite($myfile, $ctx);
 	fclose($myfile);
 	return 1;
 }
 
-function ctxFile($file) { 
+function ctxFile($file) {
 	if (!is_file($file)) return '';
 	$myfile = fopen($file, "r") or die("Unable to open file!");
 	$ctx = fread($myfile,filesize($file));
@@ -494,26 +494,26 @@ function ctxFile($file) {
 	return $ctx;
 }
 
-function copyFile($origin, $dist) { 
+function copyFile($origin, $dist) {
 	$file = ctxFile($origin);
 	return createFile($dist, $file);
 }
 
-function getObjFile($file,$path) { 
+function getObjFile($file,$path) {
 	$filObj = new File($file, $path.'/'.$file);
 	$filObj->set(date('Y-m-d H:i:s', filemtime($path.'/'.$file)), 'dateCriation');
 	return $filObj;
 }
 
-function listDir($path) { 
+function listDir($path) {
 	$dir = new Dir($path);
-	if (is_dir($path)) { 
+	if (is_dir($path)) {
 		$diretorio = dir($path);
-		while ($file = $diretorio->read()) { 
-			if ($file != '.' && $file != '..') { 
-				if (is_dir($path.'/'.$file)) { 
+		while ($file = $diretorio->read()) {
+			if ($file != '.' && $file != '..') {
+				if (is_dir($path.'/'.$file)) {
 					$dir->push(listDir($path.'/'.$file), 'branchs');
-				} else { 
+				} else {
 					$ext = explode('.', $file);
 					array_splice($ext, 0,-1);
 					$ext = implode('', $ext);
@@ -521,7 +521,7 @@ function listDir($path) {
 					$filObj = getObjFile($file,$path);
 
 					$extsImgs = explode(',','PNG,JPG,TIFF,JPEG,BMP,PSD,EXIF,RAW,PDF,WEBP,GIF,EPS,SVG');
-					if (in_array(strtoupper($ext), $extsImgs) && $size = getimagesize($path.'/'.$file)) { 
+					if (in_array(strtoupper($ext), $extsImgs) && $size = getimagesize($path.'/'.$file)) {
 						list($width, $height) = $size;
 						$filObj->set($height, 'height');
 						$filObj->set($width, 'width');
@@ -531,28 +531,28 @@ function listDir($path) {
 				}
 			}
 		}
-	} else { 
+	} else {
 		$dir->set('Not Dir', 'name');
 	}
 	return $dir;
 }
 
-function copyDir($dirOrigin, $dirDist) { 
-	if (is_dir($dirOrigin)) { 
+function copyDir($dirOrigin, $dirDist) {
+	if (is_dir($dirOrigin)) {
 		if (!is_dir($dirDist)) mkdir($dirDist);
 
 		$objects = scandir($dirOrigin);
-		foreach ($objects as $object) { 
-			if ($object != '.' && $object != '..') { 
-				if (is_dir($dirOrigin . DIRECTORY_SEPARATOR . $object)) { 
+		foreach ($objects as $object) {
+			if ($object != '.' && $object != '..') {
+				if (is_dir($dirOrigin . DIRECTORY_SEPARATOR . $object)) {
 					mkdir($dirDist . DIRECTORY_SEPARATOR . $object);
 					copyDir(
-						$dirOrigin . DIRECTORY_SEPARATOR . $object, 
+						$dirOrigin . DIRECTORY_SEPARATOR . $object,
 						$dirDist . DIRECTORY_SEPARATOR . $object
 					);
-				} else if (is_file($dirOrigin . DIRECTORY_SEPARATOR . $object)) { 
+				} else if (is_file($dirOrigin . DIRECTORY_SEPARATOR . $object)) {
 					copyFile(
-						$dirOrigin . DIRECTORY_SEPARATOR . $object, 
+						$dirOrigin . DIRECTORY_SEPARATOR . $object,
 						$dirDist . DIRECTORY_SEPARATOR . $object
 					);
 				}
@@ -561,19 +561,19 @@ function copyDir($dirOrigin, $dirDist) {
 	}
 }
 
-function removeDir($dir) { 
-	if (is_dir($dir)) { 
+function removeDir($dir) {
+	if (is_dir($dir)) {
 		$objects = scandir($dir);
-		foreach ($objects as $object) { 
-			if ($object != '.' && $object != '..') { 
-				if (is_dir($dir . DIRECTORY_SEPARATOR . $object)) { 
+		foreach ($objects as $object) {
+			if ($object != '.' && $object != '..') {
+				if (is_dir($dir . DIRECTORY_SEPARATOR . $object)) {
 					removeDir($dir . DIRECTORY_SEPARATOR . $object);
-				} else if (is_file($dir . DIRECTORY_SEPARATOR . $object)) { 
-					if (!unlink($dir . DIRECTORY_SEPARATOR . $object)) { 
+				} else if (is_file($dir . DIRECTORY_SEPARATOR . $object)) {
+					if (!unlink($dir . DIRECTORY_SEPARATOR . $object)) {
 						// code in case the file was not removed
 					}
 					// wait a bit here?
-				} else { 
+				} else {
 					// code for debug file permission issues
 				}
 			}
@@ -583,12 +583,12 @@ function removeDir($dir) {
 	}
 }
 
-function deleteFile($file) { 
+function deleteFile($file) {
 	if (!is_file($file)) return '';
 	return unlink($file);
 }
 
-function setTextInFile($path, $text, $start, $end) { 
+function setTextInFile($path, $text, $start, $end) {
 	$file = ctxFile($path);
 	$file = explode($start, $file);
 	$pre = $file[0];
@@ -599,7 +599,7 @@ function setTextInFile($path, $text, $start, $end) {
 	createFile($path, $file);
 }
 
-function getTextInFile($path, $start, $end) { 
+function getTextInFile($path, $start, $end) {
 	$file = ctxFile($path);
 	$file = explode($start, $file);
 	$text = $file[1];
@@ -608,12 +608,14 @@ function getTextInFile($path, $start, $end) {
 	return $text;
 }
 
-function resolvPath($path) { 
+function resolvPath($path, $createPath=true) {
 	$path = explode('/', $path);
 	$pathNew = '';
-	for ($i = 0; $i < sizeof($path); $i++) { 
+	for ($i = 0; $i < sizeof($path); $i++) {
 		$pathNew .= ($i == 0 ? '' : '/') . $path[$i];
-		if ($path[$i] != '.' && $path[$i] != '..' && $path[$i] != '' && !is_dir($pathNew)) { 
+		if ($path[$i] != '.' && $path[$i] != '..' && $path[$i] != ''
+			&& !is_dir($pathNew) && $createPath
+		) {
 			mkdir($pathNew);
 		}
 	}
@@ -623,7 +625,7 @@ function resolvPath($path) {
 /**********************************************************************************************/
 /* FUNÇÕES PARA OBJETOS JSON */
 /**********************************************************************************************/
-function toJson($variavel) { 
+function toJson($variavel) {
 	$resultado = $variavel;
 		 if (gettype($variavel) == 'object') $resultado = objectEmJson($variavel);
 	else if (gettype($variavel) == 'array' ) $resultado = arrayEmJson($variavel);
@@ -631,20 +633,20 @@ function toJson($variavel) {
 	return $resultado;
 }
 
-function objectEmJson($objeto) { 
+function objectEmJson($objeto) {
 	$class_vars = get_class_vars(get_class($objeto));
 	$arrayObjeto = array();
 	$namesClass = array();
 
 	$indiceVariable = -1;
-	foreach ($class_vars as $name => $value) { 
+	foreach ($class_vars as $name => $value) {
 		if ($name == 'variable') $indiceVariable = sizeof($namesClass);
 		array_push($namesClass, $name);
 	}
 
 	if ($indiceVariable != -1) $namesClass = $objeto->get($namesClass[$indiceVariable]);
 
-	for ($i=0; $i < sizeof($namesClass); $i++) { 
+	for ($i=0; $i < sizeof($namesClass); $i++) {
 		array_push($arrayObjeto, $namesClass[$i], $objeto->get($namesClass[$i]));
 	}
 
@@ -652,13 +654,13 @@ function objectEmJson($objeto) {
 	$primeiro = true;
 	$stringArray = "";
 	$preStringArray = "";
-	foreach ($arrayObjeto as $key => $value) { 
+	foreach ($arrayObjeto as $key => $value) {
 		if ($verifica) { 
 			if ($primeiro) 	$preStringArray = "{\"".$value."\":";
 			else 			$preStringArray = ",\"".$value."\":";
 			$verifica = false;
-		} else { 
-			switch (gettype($value)) { 
+		} else {
+			switch (gettype($value)) {
 				case 'string':
 					$stringArray .= $preStringArray."\"".$value."\"";
 					break;
@@ -693,12 +695,12 @@ function objectEmJson($objeto) {
 	return $stringArray."}";
 }
 
-function arrayEmJson($array) { 
+function arrayEmJson($array) {
 	$stringArray = "[";
 	$primeiro = true;
 
-	foreach ($array as $key => $value) { 
-		switch (gettype($value)) { 
+	foreach ($array as $key => $value) {
+		switch (gettype($value)) {
 			case 'string':
 				if ($primeiro) 	$stringArray .= "\"".$value."\"";
 				else 			$stringArray .= ",\"".$value."\"";
