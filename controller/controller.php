@@ -5,6 +5,11 @@ ini_set('display_errors', 1);
 
 date_default_timezone_set('America/Sao_Paulo');
 
+if (is_file('../vendor/autoload.php')) require '../vendor/autoload.php';
+
+use Aws\S3\S3Client;
+use Aws\S3\Exception\S3Exception;
+
 include "./constConfig.php";
 include "./funcoes.php";
 $pdo = getConection();
@@ -14,21 +19,21 @@ if (is_file('./ClassSQL/classSQL.php')) include './ClassSQL/classSQL.php';
 $config = json_decode(CONFIG_JSON);
 $inativo = !empty($config->login->login_ckInativo) ? $config->login->login_ckInativo : '';
 
-// if (!empty($_POST['HASH'])) { 
+// if (!empty($_POST['HASH'])) {
 // 	$id_usuario = $_POST['HASH'];
-// } else { 
+// } else {
 // 	echo toJson(array(new FalseDebug('Não esta logado no sistema!')));
 // 	// if (gettype($pdo) == 'resource') ibase_close($pdo);
 // 	return;
 // }
-// if (empty($_POST['master'])) { 
-	if (!empty($_POST['HASH'])) { 
+// if (empty($_POST['master'])) {
+	if (!empty($_POST['HASH'])) {
 		$usuario_Global = returnUser($pdo, $_POST['HASH'], $inativo); // $_POST['id_usuario'];
-		if ($usuario_Global === false) { 
+		if ($usuario_Global === false) {
 			echo toJson(array(new FalseDebug('Não esta logado no sistema!')));
 			return;
 		}
-	} else { 
+	} else {
 		echo toJson(array(new FalseDebug('Não esta logado no sistema!')));
 		return;
 	}
@@ -38,22 +43,23 @@ $inativo = !empty($config->login->login_ckInativo) ? $config->login->login_ckIna
 if (is_file('./include.php')) include './include.php';
 
 
-if (!empty($_POST['updateUser'])) { 
-	if (isset($usuario_Global)) { 
+if (!empty($_POST['updateUser'])) {
+	if (isset($usuario_Global)) {
 		echo toJson($usuario_Global);
 	} else {
 		echo '{ "debug": "NO_VALID" }';
 	}
 }
 
-if (!empty($_POST['getConfigPrincipal'])) { 
+if (!empty($_POST['getConfigPrincipal'])) {
 	$config->principal->nome_projeto = $config->nome_projeto;
-	if (isset($config->colorLoadAlert)) $config->principal->colorLoadAlert = $config->colorLoadAlert;
+	if (isset($config->colorLoadAlert))
+		$config->principal->colorLoadAlert = $config->colorLoadAlert;
 	echo json_encode($config->principal);
 }
 
-if (!empty($_POST['getMenu'])) { 
-	class MenuItem extends PadraoObjeto { 
+if (!empty($_POST['getMenu'])) {
+	class MenuItem extends PadraoObjeto {
 		var $header;
 		var $desc;
 		var $file;
@@ -64,7 +70,7 @@ if (!empty($_POST['getMenu'])) {
 	$menu = $config->menu;
 
 	// Percorre menu
-	for ($i=0; $i < sizeof($menu); $i++) { 
+	for ($i=0; $i < sizeof($menu); $i++) {
 		$itemMenuParent = $menu[$i];
 
 		// Verifica se tem acesso ao menu
@@ -76,17 +82,16 @@ if (!empty($_POST['getMenu'])) {
 					$itemMenuParent->admin == false
 				)
 			)
-		) { 
+		) {
 			$indice = sizeof($menuAcesso);
 			array_push($menuAcesso, new MenuItem());
 
 			$itemMenuParentAcesso = $menuAcesso[$indice];
 
 			// Se o item do menu for só header
-			if (!empty($itemMenuParent->header)) { 
+			if (!empty($itemMenuParent->header)) {
 				$itemMenuParentAcesso->set($itemMenuParent->header, 'header');
-			} else { 
-
+			} else {
 				// Seta item menu descrição e arquivo caso tenha
 				$itemMenuParentAcesso->set($itemMenuParent->desc, 'desc');
 				if (!empty($itemMenuParent->file)) 
@@ -97,9 +102,8 @@ if (!empty($_POST['getMenu'])) {
 					$itensMenu = $itemMenuParent->itens;
 
 					// Percorre os itens de menu
-					for ($j=0; $j < sizeof($itensMenu); $j++) { 
+					for ($j=0; $j < sizeof($itensMenu); $j++) {
 						$itemMenu = $itensMenu[$j];
-
 						// Verifica se tem acesso ao item
 						if (
 							!isset($usuario_Global) || (
@@ -108,7 +112,7 @@ if (!empty($_POST['getMenu'])) {
 									empty($itemMenu->admin) || $itemMenu->admin == false
 								)
 							)
-						) { 
+						) {
 							// Seta o item de menu
 							$indiceItem = sizeof($itemMenuParentAcesso->get('itens'));
 							$itemMenuParentAcesso->push(new MenuItem(), 'itens');
@@ -130,25 +134,24 @@ if (!empty($_POST['getMenu'])) {
 	echo toJson($menuAcesso);
 }
 
-if (!empty($_POST['loadView'])) { 
+if (!empty($_POST['loadView'])) {
 	$view = $_POST['view'];
 	if (!empty($_POST['isApp']) && $view == "main") $view = 'mainApp';
 	$ctsView = file_get_contents('../view/' . $view . '.' . EXT_VIEW);
 
-	if (EXT_VIEW == 'php') { 
+	if (EXT_VIEW == 'php') {
 		$ctsView = explode("\n", $ctsView);
 		$ctsView = array_splice($ctsView, 1, sizeof($ctsView));
 		$ctsView = implode("\n", $ctsView);
 	}
-
 	echo $ctsView;
 }
 
-if (!empty($_POST['dataFile'])) { 
+if (!empty($_POST['dataFile'])) {
 	echo filemtime($_POST['path']);
 }
 /* Enviar arquivo via base64 */
-if (!empty($_POST['sendBase64'])) { 
+if (!empty($_POST['sendBase64'])) {
 	$tempName = !empty($_POST['tempName']) ? $_POST['tempName'] : date('ymdHis').rand(0,100);
 	$base64 = $_POST['base64'];
 
@@ -161,7 +164,7 @@ if (!empty($_POST['sendBase64'])) {
 	echo $tempName;
 }
 
-if (!empty($_POST['doneSendBase64'])) { 
+if (!empty($_POST['doneSendBase64'])) {
 	$tempName 		= $_POST['tempName'];
 	$fileName 		= $_POST['fileName'];
 	$path 			= $_POST['path'];
@@ -174,33 +177,86 @@ if (!empty($_POST['doneSendBase64'])) {
 	$ctx = fread($arquivo, filesize('./temp/'.$tempName));
 	fclose($arquivo);
 
-	$path = resolvPath($path);
-
-	$arquivo2 = fopen($path.$fileName.'.'.$ext, "w") or die("Unable to open file!");
-	if (empty($_POST['no_base64'])) { 
-		if (in_array(strtolower($ext), $arrayExtText)) { 
-			fwrite($arquivo2, utf8_encode(base64_decode($ctx)));
-		} else { 
-			fwrite($arquivo2, base64_decode($ctx));
-		}
-	} else { 
-		fwrite($arquivo2, $ctx);
+	$path = resolvPath($path, empty($_POST['use_aws']));
+	if (!empty($_POST['use_userPath'])) {
+		if (empty($_POST['use_aws'])) resolvPath($path.$id_usuario.'/');
+		$fileName = $id_usuario.'/'.$fileName;
 	}
-	fclose($arquivo2);
+
+	$ctx = empty($_POST['no_base64']) ? base64_decode($ctx) : $ctx;
+	$ctx = in_array(strtolower($ext), $arrayExtText) ? utf8_encode($ctx) : $ctx;
+
+	if (empty($_POST['use_aws'])) {
+		// echo 'não usar aws';
+		$arquivo2 = fopen($path.$fileName.'.'.$ext, "w") or die("Unable to open file!");
+		fwrite($arquivo2, $ctx);
+		fclose($arquivo2);
+	} else {
+		// echo 'usar aws';
+		$configEnv 		= json_decode(CONFIG_ENV);
+		$bucketName 	= $configEnv->aws->bucket;
+		$IAM_KEY 		= $configEnv->aws->user->accessKey;
+		$IAM_SECRET 	= $configEnv->aws->user->secretKey;
+		$region 		= $configEnv->aws->region;
+
+		try {
+			$s3 = S3Client::factory(array(
+				'credentials' => array(
+					'key' => $IAM_KEY,
+					'secret' => $IAM_SECRET
+				),
+				'version' => 'latest',
+				'region'  => $region
+			));
+		} catch (Exception $e) {
+			// echo 'Error S3';
+			die("Error: " . $e->getMessage());
+		}
+		// For this, I would generate a unqiue random string for the key name. But you can do whatever.
+		// $keyName = 'test_example/' . basename($_FILES["fileToUpload"]['tmp_name']);
+		$keyName = $path.$fileName.'.'.$ext;
+		$pathInS3 = 'https://s3.' . $region . '.amazonaws.com/' . $bucketName . '/' . $keyName;
+
+		try {
+			$arquivo = fopen('./temp/'.$tempName, "w") or die("Unable to open file!");
+			fwrite($arquivo, $ctx);
+			fclose($arquivo);
+
+			$file = './temp/'.$tempName;
+
+			$result = $s3->putObject(
+				array(
+					// 'ACL' => 'public-read-write',
+					'ACL' => 'public-read',
+					'Bucket'=> $bucketName,
+					'Key' => $keyName,
+					'SourceFile' => $file,
+					'StorageClass' => 'REDUCED_REDUNDANCY'
+					// 'StorageClass' => 'STANDARD'
+				)
+			);
+		} catch (S3Exception $e) {
+			// echo 'S3Exception com s3';
+			die('Error:' . $e->getMessage());
+		} catch (Exception $e) {
+			// echo 'Exception sem s3';
+			die('Error:' . $e->getMessage());
+		}
+	}
 
 	$file = './temp/'.$tempName;
 	if (is_file($file)) unlink($file);
 
-	if (!empty($_POST['fotoPerfil'])) { 
+	if (!empty($_POST['returnNamePhoto'])) {
 		echo "$fileName.$ext";
-	} else { 
+	} else {
 		echo '1';
 	}
 }
 /* End: Enviar arquivo via base64 */
 
 
-function log_banco($nomeDaTabela, $identificador, $modificacoes, $tipo, $pdo, $id_usuario) { 
+function log_banco($nomeDaTabela, $identificador, $modificacoes, $tipo, $pdo, $id_usuario) {
 	// class Log extends PadraoObjeto {
 	// 	var $data;
 	// 	var $tipo;
@@ -226,8 +282,8 @@ function log_banco($nomeDaTabela, $identificador, $modificacoes, $tipo, $pdo, $i
 	$logs = array();
 	$log = array(
 		'data'=> date('Y-m-d H:i:s'),
-		'tipo'=> $tipo, 
-		'descricao'=> $modificacoes, 
+		'tipo'=> $tipo,
+		'descricao'=> $modificacoes,
 		'id_usuario'=> $id_usuario 
 	);
 
@@ -239,7 +295,7 @@ function log_banco($nomeDaTabela, $identificador, $modificacoes, $tipo, $pdo, $i
 	return padraoExecute($pdo, $sql);
 }
 
-function returnUser($pdo, $hash, $inativo='') { 
+function returnUser($pdo, $hash, $inativo='') {
 	if ($inativo != '') $inativo = "AND $inativo = 0";
 
 	$sql = "SELECT 	USUARIO.ID_USUARIO

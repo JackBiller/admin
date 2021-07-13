@@ -101,10 +101,25 @@ if (!empty($_POST['loginSystem']) && !empty($_POST['login']) && !empty($_POST['s
 	$senha = hash('sha224', $senha);
 	$hashIdtentificacao = hash('sha224', date('YmdHis'));
 
+	$paramAddAws = "
+				, 0 AS CK_USE_AWS";
+	$configEnv = json_decode(CONFIG_ENV);
+	if (isset($configEnv->aws) && isset($configEnv->aws->usePerfilFoto) 
+		&& $configEnv->aws->usePerfilFoto == true
+	) {
+		$region = $configEnv->aws->region;
+		$bucket = $configEnv->aws->bucket;
+		$paramAddAws = "
+				, 1 AS CK_USE_AWS
+				, '$region' AS AWS_REGION
+				, '$bucket' AS AWS_BUCKET";
+	}
+
 	$sql = "SELECT
 				USUARIO.ID_USUARIO
 				, USUARIO.NOME_CONTA AS NOME
 				, USUARIO.FOTO_USUARIO
+				$paramAddAws
 				, '$hashIdtentificacao' AS HASH
 			FROM 	USUARIO
 			WHERE 	USUARIO.EMAIL 		= '$login'

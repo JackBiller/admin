@@ -596,8 +596,15 @@ function initComponet() {
 		+ `</div>`
 	);
 
-	if ((usuario_Global.FOTO_USUARIO || '') != '')
-		$(".foto-user").attr('src', '../img/perfil/' + usuario_Global.FOTO_USUARIO);
+	if ((usuario_Global.FOTO_USUARIO || '') != '') {
+		var path = '../img/perfil/';
+		if (usuario_Global.CK_USE_AWS == 1) {
+			var bucket = usuario_Global.AWS_BUCKET
+			, 	region = usuario_Global.AWS_REGION;
+			path = 'https://' + bucket + '.s3.' + region + '.amazonaws.com/perfil/';
+		}
+		$(".foto-user").attr('src', path + usuario_Global.FOTO_USUARIO);
+	}
 
 	// $(".foto-user").attr("src","../img/perfil/" + JSON.parse(localStorage.getItem('usuario')).ID_USUARIO + ".png");
 	// $(".btn-logoff").attr('onclick', function(){ logoff(); });
