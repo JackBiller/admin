@@ -4,18 +4,18 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-class Conexao { 
+class Conexao {
 	private static $conexao = null;
 	public $db_driver;
 
-	function __construct($config) { 
+	function __construct($config) {
 		$db_host 			= $config->db_host;
 		$db_nome 			= $config->db_nome;
 		$db_usuario 		= $config->db_usuario;
 		$db_senha 			= $config->db_senha;
 		$this->db_driver 	= $config->db_driver;
 
-		if ($this->db_driver == 'firebird') { 
+		if ($this->db_driver == 'firebird') {
 			$dt_encode = $config->dt_encode;
 
 			eval("
@@ -26,8 +26,8 @@ class Conexao {
 				, \$dt_encode
 			) or die(\"Ibase: Não foi possível conectar-se ao servidor [\$db_host/\$db_nome].\");");
 		}
-		if ($this->db_driver == 'mysql') { 
-			try { 
+		if ($this->db_driver == 'mysql') {
+			try {
 				# Atribui o objeto PDO à variável $conexao.
 				self::$conexao = new PDO(
 					$this->db_driver . ":host=$db_host; dbname=$db_nome"
@@ -38,15 +38,15 @@ class Conexao {
 				# Garante que o PDO lance exceções durante erros.
 				self::$conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			}
-			catch (PDOException $e) { 
+			catch (PDOException $e) {
 				# Então não carrega nada mais da página.
 				echo 'ERROR: ' . $e->getMessage();
 			}
 		}
-		if ($this->db_driver == 'sqlsrv') { 
+		if ($this->db_driver == 'sqlsrv') {
 			$db_instancia 	= $config->db_instancia;
 			$dt_port 		= $config->db_port;
-			try { 
+			try {
 				self::$conexao = new PDO(
 					$this->db_driver . ":Server={$db_host}\\{$db_instancia},{$dt_port};Database={$db_nome}"
 					, $db_usuario
@@ -54,7 +54,7 @@ class Conexao {
 					, array(PDO::SQLSRV_ENCODING_UTF8 => 1)
 				);
 			}
-			catch (PDOException $e) { 
+			catch (PDOException $e) {
 				// echo "Drivers disponiveis: " . implode( ",", PDO::getAvailableDrivers() );
 				echo 'ERROR: ' . $e->getMessage();
 			}
@@ -64,33 +64,33 @@ class Conexao {
 
 	public function __wakeup() {}
 
-	public static function Connect() { 
-		if (!isset(self::$conexao)) { 
+	public static function Connect() {
+		if (!isset(self::$conexao)) {
 			eval("new Conexao(\$this->path);");
 		}
 		return self::$conexao;
 	}
 }
 
-class PadraoObjeto { 
+class PadraoObjeto {
 	var $debug = 'OK';
-	public function get($nome_campo) { 
+	public function get($nome_campo) {
 		return $this->$nome_campo;
 	}
 
-	public function set($valor , $nome_campo) { 
+	public function set($valor , $nome_campo) {
 		$this->$nome_campo = $valor;
 	}
 
-	public function check($nome_campo) { 
+	public function check($nome_campo) {
 		return isset($this->$nome_campo);
 	}
 
-	public function push($valor, $nome_campo) { 
+	public function push($valor, $nome_campo) {
 		if (gettype($this->$nome_campo) == "array") array_push($this->$nome_campo, $valor);
 	}
 
-	public function removeQuebra($tipo, $valor) { 
+	public function removeQuebra($tipo, $valor) {
 							$valor = 	str_replace("\"", '\'',
 										str_replace("\r", '', $valor));
 		if($tipo == 'html') return 		str_replace("\t", '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
@@ -99,29 +99,29 @@ class PadraoObjeto {
 										str_replace("\n", '', $valor));
 	}
 
-	public function setOptions($option=array()) { 
-		foreach ($option as $key => $value) { 
+	public function setOptions($option=array()) {
+		foreach ($option as $key => $value) {
 			$this->$key = $value;
 		}
 	}
 }
 
-class FalseDebug extends PadraoObjeto { 
-	public function __construct($msm) { 
+class FalseDebug extends PadraoObjeto {
+	public function __construct($msm) {
 		if (!empty($msm) && gettype($msm) == 'string') $this->set($msm, 'debug');
 	}
 }
 
-class Generico extends PadraoObjeto { 
+class Generico extends PadraoObjeto {
 	var $variable = array('debug');
 	var $debug = "OK";
 	var $firebird = false;
 
-	public function __construct($row, $firebird=false) { 
+	public function __construct($row, $firebird=false) {
 		$this->firebird = $firebird;
 		$contIten = 0;
-		while (current($row) !== false) { 
-			if ($contIten % 2 == 0 || $this->get('firebird')) { 
+		while (current($row) !== false) {
+			if ($contIten % 2 == 0 || $this->get('firebird')) {
 				$keys = key($row);
 				$valor = $this->get('firebird') ? $row->$keys : $row[$keys];
 				// if (!in_array($keys, $variable)) array_push($variable, $keys);
@@ -134,16 +134,20 @@ class Generico extends PadraoObjeto {
 	}
 }
 
-function getConection($config=null) { 
-	if ($config == null) 
+function getConection($config=null) {
+	if ($config == null)
 		$config = json_decode(CONFIG_ENV);
 
 	$conn = new Conexao($config);
 	return $conn->Connect();
 }
 
-function getQuery($pdo, $sql) { 
-	if (gettype($sql) == 'object') { 
+function getMsmDebug($msm, $toJson=false) {
+	return $toJson ? toJson(new FalseDebug($msm)) : new FalseDebug($msm);
+}
+
+function getQuery($pdo, $sql) {
+	if (gettype($sql) == 'object') {
 		$driveDB = gettype($pdo) == 'resource' ? 'Firebird' : $pdo->getAttribute(PDO::ATTR_DRIVER_NAME);
 		$driveDB = str_replace('sqlsrv', 'SQLServer', $driveDB);
 		$driveDB = str_replace('mysql', 'MySQL', $driveDB);
@@ -155,19 +159,19 @@ function getQuery($pdo, $sql) {
 	return $sql;
 }
 
-function padraoResultado($pdo, $sql, $msm='Nenhum resultado encontrado!') { 
+function padraoResultado($pdo, $sql, $msm='Nenhum resultado encontrado!') {
 	$sql = getQuery($pdo, $sql);
 	$arrayResultado = array();
 
-	if (gettype($pdo) == 'resource') { 
+	if (gettype($pdo) == 'resource') {
 		eval("
 		\$resultado = ibase_query(\$pdo, \$sql);
 		\$row = ibase_fetch_object(\$resultado);
 		if (empty(\$row)) 	array_push(\$arrayResultado, new FalseDebug(\$msm));
 		else 			do 	array_push(\$arrayResultado, new Generico(\$row, true)); while(\$row = ibase_fetch_object(\$resultado));");
-	} else { 
+	} else {
 		$verifica = $pdo->query($sql);
-		foreach ($verifica as $dados) { 
+		foreach ($verifica as $dados) {
 			array_push($arrayResultado, new Generico($dados));
 		}
 		if (sizeof($arrayResultado) == 0) array_push($arrayResultado, new FalseDebug($msm));
@@ -175,10 +179,10 @@ function padraoResultado($pdo, $sql, $msm='Nenhum resultado encontrado!') {
 	return $arrayResultado;
 }
 
-function padraoExecute($pdo, $sql, $table='') { 
+function padraoExecute($pdo, $sql, $table='') {
 	$sql = getQuery($pdo, $sql);
 
-	if (gettype($pdo) == 'resource') { 
+	if (gettype($pdo) == 'resource') {
 		eval("
 		\$resultado = ibase_query(\$pdo, \$sql);
 		COMMIT_WORK(\$pdo);
@@ -186,15 +190,15 @@ function padraoExecute($pdo, $sql, $table='') {
 			\$resultado = ibase_fetch_row(\$resultado);
 			\$resultado = \$resultado['0'];
 		};");
-	} else { 
+	} else {
 		$stmt = $pdo->prepare($sql);
 		$resultado = $stmt->execute();
-		if ($table != '' && $resultado == 1) { 
+		if ($table != '' && $resultado == 1) {
 			// $resultado = "SELECT ID_$table FROM $table ORDER BY ID_$table DESC LIMIT 1";
-			if ($pdo->getAttribute(PDO::ATTR_DRIVER_NAME) == 'sqlsrv') { 
+			if ($pdo->getAttribute(PDO::ATTR_DRIVER_NAME) == 'sqlsrv') {
 				// $resultado = "SELECT SCOPE_IDENTITY() AS ID";
 				$resultado = "SELECT @@IDENTITY AS ID";
-			} else { 
+			} else {
 				$resultado = "SELECT LAST_INSERT_ID();";
 			}
 			$verifica = $pdo->query($resultado);
@@ -204,38 +208,38 @@ function padraoExecute($pdo, $sql, $table='') {
 	return $resultado;
 }
 
-function COMMIT_WORK($pdo) { 
+function COMMIT_WORK($pdo) {
 	eval("\$resultado = ibase_query(\$pdo, \"COMMIT WORK;\");");
 }
 
-function printQuery($sql, $isHtml=false, $boolComentario=false) { 
+function printQuery($sql, $isHtml=false, $boolComentario=false) {
 	$sql = explode("\n", str_replace("\r", '', str_replace("\t", "    ", $sql)));
 
-	for ($i=0; $i < sizeof($sql); $i++) { 
+	for ($i=0; $i < sizeof($sql); $i++) {
 		// remover comentario
-		if (!$boolComentario) { 
-			if (strpos($sql[$i], "--") != '') { 
+		if (!$boolComentario) {
+			if (strpos($sql[$i], "--") != '') {
 				$sql[$i] = explode('--', $sql[$i]);
 				$sql[$i] = $sql[$i][0];
 			}
 		}
 		// remover espaço no final da linha
-		while (substr($sql[$i], strlen($sql[$i])-1, 1) == ' ') { 
+		while (substr($sql[$i], strlen($sql[$i])-1, 1) == ' ') {
 			$sql[$i] = substr($sql[$i], 0, strlen($sql[$i])-1);
 		}
 		// remover linhas vazias
-		if ($sql[$i] == '') { 
+		if ($sql[$i] == '') {
 			array_splice($sql, $i, 1);
 			$i--;
 		}
 	}
 	// calcular identação do codigo
 	$space = -1;
-	for ($i=1; $i < sizeof($sql); $i++) { 
-		if ($sql[$i] != '') { 
+	for ($i=1; $i < sizeof($sql); $i++) {
+		if ($sql[$i] != '') {
 			$bls = explode(' ', $sql[$i]);
 			$spaceTemp = 0;
-			for ($j=0; $j < sizeof($bls); $j++) { 
+			for ($j=0; $j < sizeof($bls); $j++) {
 				if ($bls[$j] == '') 	$spaceTemp++;
 				else 					$j = sizeof($bls);
 			}
@@ -243,13 +247,13 @@ function printQuery($sql, $isHtml=false, $boolComentario=false) {
 		}
 	}
 	// retirnar a identação do codigo
-	for ($i=1; $i < sizeof($sql); $i++) { 
+	for ($i=1; $i < sizeof($sql); $i++) {
 		$sql[$i] = substr($sql[$i], $space, strlen($sql[$i]));
 	}
 	$sql = implode("\n", $sql);
 
 	// formata para HTML
-	if ($isHtml) { 
+	if ($isHtml) {
 		$sql = 
 			str_replace("    ", '&nbsp;&nbsp;&nbsp;&nbsp;',
 			str_replace("\n", "<br>", 
@@ -258,21 +262,21 @@ function printQuery($sql, $isHtml=false, $boolComentario=false) {
 	echo $sql;
 }
 
-function in_comando($comando, $usuario='') { 
-	if ($usuario == '') { 
+function in_comando($comando, $usuario='') {
+	if ($usuario == '') {
 		global $usuario_Global;
 		$usuario = $usuario_Global;
 	}
 	return in_array($comando, explode(',', $usuario->get('COMANDO')));
 }
 
-function tratarParam($text) { 
+function tratarParam($text) {
 	$text = str_replace("'", "\\'", str_replace("\"", "\\\"",$text));
 	return $text;
 }
 
-function letraMaiuscula($letra) { 
-	switch ($letra) { 
+function letraMaiuscula($letra) {
+	switch ($letra) {
 		case 'a': $letra = 'A'; break;
 		case 'b': $letra = 'B'; break;
 		case 'c': $letra = 'C'; break;
@@ -308,57 +312,39 @@ function letraMaiuscula($letra) {
 function formatarNomeHeadTable($nome) { 
 	$nome = str_replace("-", "_-_", $nome);
 	$nomeVetor = explode("_",$nome);
-	for ($i=0; $i < (count($nomeVetor) - 1); $i++) { 
-		if ($i == 0) { 
-			$nome = corretor(
-						letraMaiuscula(
-							substr($nomeVetor[$i], 0, 1)).substr($nomeVetor[$i], 1, strlen($nomeVetor[$i])
-						)
-					);
-		} else { 
-			$nome .= " ".corretor(
-							letraMaiuscula(
-								substr($nomeVetor[$i], 0, 1)).substr($nomeVetor[$i], 1, strlen($nomeVetor[$i])
-							)
-						);
-		}
+	for ($i=0; $i < (count($nomeVetor) - 1); $i++) {
+		$nome = ($i == 0 ? '' : $nome . " ").corretor(''
+			. letraMaiuscula(substr($nomeVetor[$i], 0, 1))
+			. substr($nomeVetor[$i], 1, strlen($nomeVetor[$i]))
+		);
 	}
 	return $nome;
 }
 
-function formatarNomeHeadTable2($nome) { 
+function formatarNomeHeadTable2($nome) {
 	$nome = str_replace("-", "_-_", $nome);
 	$nomeVetor = explode("_",$nome);
-	for ($i=0; $i < sizeof($nomeVetor); $i++) { 
-		if ($i == 0) { 
-			$nome = corretor(
-						letraMaiuscula(
-							substr($nomeVetor[$i], 0, 1)).substr($nomeVetor[$i], 1, strlen($nomeVetor[$i])
-						)
-					);
-		} else { 
-			$nome .= " ".corretor(
-							letraMaiuscula(
-								substr($nomeVetor[$i], 0, 1)).substr($nomeVetor[$i], 1, strlen($nomeVetor[$i])
-							)
-						);
-		}
+	for ($i=0; $i < sizeof($nomeVetor); $i++) {
+		$nome = ($i == 0 ? '' : $nome . " ").corretor(''
+			. letraMaiuscula(substr($nomeVetor[$i], 0, 1))
+			. substr($nomeVetor[$i], 1, strlen($nomeVetor[$i]))
+		);
 	}
 	return $nome;
 }
 
-function formatarNomeCampo($nomeCampo, $qtdTirarUltimo) { 
+function formatarNomeCampo($nomeCampo, $qtdTirarUltimo) {
 	$arrayNomeCampo = explode("_", $nomeCampo);
 	$nomeCampo = "";
-	if (sizeof($arrayNomeCampo)-$qtdTirarUltimo > 0) { 
-		for ($i=0; $i < sizeof($arrayNomeCampo)-$qtdTirarUltimo; $i++) { 
+	if (sizeof($arrayNomeCampo)-$qtdTirarUltimo > 0) {
+		for ($i=0; $i < sizeof($arrayNomeCampo)-$qtdTirarUltimo; $i++) {
 			$nomeCampo .= $i == 0 ? $arrayNomeCampo[$i] : "_".$arrayNomeCampo[$i];
 		}
 	}
 	return $nomeCampo;
 }
 
-function juntaTodosMenosPrimeiro($array) { 
+function juntaTodosMenosPrimeiro($array) {
 	$resultado = "";
 	$cont = 0;
 	for ($i = 1; $i < sizeof($array); $i++) { 
@@ -368,7 +354,7 @@ function juntaTodosMenosPrimeiro($array) {
 	return $resultado;
 }
 
-function retornaUltimaPosicao($array) { 
+function retornaUltimaPosicao($array) {
 	$resultado = "";
 	for ($i=sizeof($array)-1; $i >= 0; $i--) { 
 		$resultado = $array[$i];
@@ -377,10 +363,10 @@ function retornaUltimaPosicao($array) {
 	return $resultado;
 }
 
-function corretor($palavra) { 
+function corretor($palavra) {
 	$preDirectory = "";
 	$tentativas = 5;
-	for ($i=0; $i < $tentativas; $i++) { 
+	for ($i=0; $i < $tentativas; $i++) {
 		if (is_dir($preDirectory."Dicionario")): $preDirectory .= "Dicionario"; $i = $tentativas; endif;
 		$preDirectory .= "../";
 	}
@@ -748,32 +734,32 @@ function arrayEmJson($array) {
 /* OUTRAS FUNÇÕES DO ARQUIVO SANHIDREL funcoes.php */
 /**********************************************************************************************/
 /** FUNÇÕES COM DATAS */
-function formataDatUN($dataUN) { 
+function formataDatUN($dataUN) {
 	return implode("/", array_reverse(explode("-", $dataUN)));
 }
 
-function formataDataBR($dataBR) { 
+function formataDataBR($dataBR) {
 	return implode("-", array_reverse(explode("/", $dataBR)));
 }
 
-function formatarDataMes($dataBR) { 
+function formatarDataMes($dataBR) {
 	$dataBR = explode('/', $dataBR);
 	return retornaMes($dataBR[1], 'abr') . "/" . $dataBR[2];
 }
 
-function formatarDataMesUN($dataUN) { 
+function formatarDataMesUN($dataUN) {
 	$dataUN = explode('-', $dataUN);
 	return  $dataUN[0] . "-" . retornaMes($dataUN[1], 'abr');
 }
 
-function formatarDataPadraoAmericano($data) { 
+function formatarDataPadraoAmericano($data) {
 		 if (strpos($data, '.')) 	return implode('-', array_reverse(explode('.', $data)));
 	else if (strpos($data, '/'))	return implode('-', array_reverse(explode('/', $data)));
 	else 							return $data;
 }
 
-function retornaMes($mes, $tipo) { 
-	switch ($mes) { 
+function retornaMes($mes, $tipo) {
+	switch ($mes) {
 		case  1: 	$mes = $tipo == 'abr' ? 'Jan' : 'Janeiro'; 		break;
 		case  2: 	$mes = $tipo == 'abr' ? 'Fev' : 'Fevereiro'; 	break;
 		case  3: 	$mes = $tipo == 'abr' ? 'Mar' : 'Março'; 		break;
@@ -790,10 +776,10 @@ function retornaMes($mes, $tipo) {
 	return $mes;
 }
 
-function ordernarArray($array) { 
-	for ($i=0; $i < sizeof($array); $i++) { 
+function ordernarArray($array) {
+	for ($i=0; $i < sizeof($array); $i++) {
 		$dataAtual = $array[$i];
-		for ($x=$i+1; $x < sizeof($array); $x++) { 
+		for ($x=$i+1; $x < sizeof($array); $x++) {
 			if ($dataAtual > $array[$x]) {
 				$novaData = $dataAtual;
 				$array[$i] = $array[$x];
@@ -805,23 +791,23 @@ function ordernarArray($array) {
 	return $array;
 }
 
-function removerEspacoDuplo($str) { 
-	while(strpos($str,"  ")) $str = str_replace("  ", " ", $str);
+function removerEspacoDuplo($str) {
+	while (strpos($str,"  ")) $str = str_replace("  ", " ", $str);
 	return $str;
 }
 
-function formataParaQuery($texto, $tabelaSql, $campoSql) { 
+function formataParaQuery($texto, $tabelaSql, $campoSql) {
 	$texto = explode(" ", $texto);
 	$descricaoCompleta = "";
-	for ($i=0; $i < sizeof($texto); $i++) { 
-		if ($texto[$i] != "") { 
-			if ($campoSql == "DS_MARCA") { 
+	for ($i=0; $i < sizeof($texto); $i++) {
+		if ($texto[$i] != "") {
+			if ($campoSql == "DS_MARCA") {
 				$descricaoCompleta .= "
 					$tabelaSql.$campoSql LIKE '%' || UPPER('" . $texto[$i] . "') || '%'";
-			} else if ($campoSql == "SIGLA_MARCA") { 
+			} else if ($campoSql == "SIGLA_MARCA") {
 				$descricaoCompleta .= "
 					OR $tabelaSql.$campoSql LIKE '%' || UPPER('" . $texto[$i] . "') || '%'";
-			} else { 
+			} else {
 				$descricaoCompleta .= "
 					AND $tabelaSql.$campoSql LIKE '%' || UPPER('" . $texto[$i] . "') || '%'";
 			}
@@ -831,7 +817,7 @@ function formataParaQuery($texto, $tabelaSql, $campoSql) {
 	return $texto;
 }
 
-function sanitizeString($str) { 
+function sanitizeString($str) {
 	header('Content-type: text/html; charset=ISO-8859-1');
 	$str = preg_replace('/[áàãâä]/ui', 'a', $str);
 	$str = preg_replace('/[éèêë]/ui', 'e', $str);
@@ -847,7 +833,7 @@ function sanitizeString($str) {
 	return $str;
 }
 
-function retirarAcento($texto) { 
+function retirarAcento($texto) {
 	// header('Content-type: text/html; charset=ISO-8859-1');
 	$texto = str_replace("À", "A", $texto);
 	$texto = str_replace("Á", "A", $texto);
@@ -971,7 +957,41 @@ function retirarAcento($texto) {
 	return $texto;
 }
 
-function decodificarUtf8($texto) { 
+function replaceUnicode($texto) {
+	$replace = array(
+		 ' ','¡','¢','£','¤','¥','¦','§','¨','©'
+		,'ª','«','¬','®','¯','°','±','²','³','´'
+		,'µ','¶','·','¸','¹','º','»','¼','½','¾'
+		,'¿','À','Á','Â','Ã','Ä','Å','Æ','Ç','È'
+		,'É','Ê','Ë','Ì','Í','Î','Ï','Ð','Ñ','Ò'
+		,'Ó','Ô','Õ','Ö','×','Ø','Ù','Ú','Û','Ü'
+		,'Ý','Þ','ß','à','á','â','ã','ä','å','æ'
+		,'ç','è','é','ê','ë','ì','í','î','ï','ð'
+		,'ñ','ò','ó','ô','õ','ö','÷','ø','ù','ú'
+		,'û','ü','ý','þ','ÿ'
+	);
+
+	$search = array(
+		 'u00A0','u00A1','u00A2','u00A3','u00A4','u00A5','u00A6','u00A7','u00A8','u00A9'
+		,'u00AA','u00AB','u00AC','u00AE','u00AF','u00B0','u00B1','u00B2','u00B3','u00B4'
+		,'u00B5','u00B6','u00B7','u00B8','u00B9','u00BA','u00BB','u00BC','u00BD','u00BE'
+		,'u00BF','u00C0','u00C1','u00C2','u00C3','u00C4','u00C5','u00C6','u00C7','u00C8'
+		,'u00C9','u00CA','u00CB','u00CC','u00CD','u00CE','u00CF','u00D0','u00D1','u00D2'
+		,'u00D3','u00D4','u00D5','u00D6','u00D7','u00D8','u00D9','u00DA','u00DB','u00DC'
+		,'u00DD','u00DE','u00DF','u00E0','u00E1','u00E2','u00E3','u00E4','u00E5','u00E6'
+		,'u00E7','u00E8','u00E9','u00EA','u00EB','u00EC','u00ED','u00EE','u00EF','u00F0'
+		,'u00F1','u00F2','u00F3','u00F4','u00F5','u00F6','u00F7','u00F8','u00F9','u00FA'
+		,'u00FB','u00FC','u00FD','u00FE','u00FF'
+	);
+
+	for ($i=0; $i < sizeof($search); $i++) {
+		$texto = str_replace($search[$i], $replace[$i], $texto);
+		$texto = str_replace(strtolower($search[$i]), $replace[$i], $texto);
+	}
+	return $texto;
+}
+
+function decodificarUtf8($texto) {
 	$texto = str_replace("â‚¬", "€", $texto);
 	$texto = str_replace("â€š", "‚", $texto);
 	$texto = str_replace("â€ž", "„", $texto);
@@ -1099,24 +1119,24 @@ function decodificarUtf8($texto) {
 	return $texto;
 }
 
-function criptografar($chave) { 
+function criptografar($chave) {
 	$chave = "$chave"; $num = "";
-	for ($i = 0; $i < strlen($chave); $i++) { 
+	for ($i = 0; $i < strlen($chave); $i++) {
 		$num .= subNumCrip($chave[$i]);
 	}
 	return parseHex($num);
 }
 
-function descriptografar($codigo, $chave) { 
+function descriptografar($codigo, $chave) {
 	$codigoQuebra = parseDec($codigo); $codigo = "";
-	while (strlen($codigoQuebra) >= $chave) { 
+	while (strlen($codigoQuebra) >= $chave) {
 		$codigo .= subNumDesCrip(substr($codigoQuebra, 0, $chave));
 		$codigoQuebra = substr($codigoQuebra, $chave, strlen($codigoQuebra));
 	}
 	return $codigo;
 }
 
-function subNumCrip($num) { 
+function subNumCrip($num) {
 	switch ($num) { 
 		case 0: $num = 21; break;
 		case 1: $num = 42; break;
@@ -1132,7 +1152,7 @@ function subNumCrip($num) {
 	return $num;
 }
 
-function subNumDesCrip($num) { 
+function subNumDesCrip($num) {
 	switch ($num) { 
 		case 21: $num = 0; break;
 		case 42: $num = 1; break;
@@ -1148,7 +1168,7 @@ function subNumDesCrip($num) {
 	return $num;
 }
 
-function parseHex($num) { 
+function parseHex($num) {
 	$hex = ""; $hexVez = "";
 	while ($num >= 16) { 
 		$hexVez = ($num % 16);
@@ -1158,8 +1178,8 @@ function parseHex($num) {
 	return $hex . validaAcimaDez($num);
 }
 
-function validaAcimaDez($num) { 
-	switch ($num) { 
+function validaAcimaDez($num) {
+	switch ($num) {
 		case 10: $num = 'A'; break;
 		case 11: $num = 'B'; break;
 		case 12: $num = 'C'; break;
@@ -1170,10 +1190,10 @@ function validaAcimaDez($num) {
 	return $num;
 }
 
-function parseDec($hex) { 
+function parseDec($hex) {
 	$numVez = 0; $num = 0;
-	for ($i = 0; $i < strlen($hex); $i++) { 
-		switch ($hex[$i]) { 
+	for ($i = 0; $i < strlen($hex); $i++) {
+		switch ($hex[$i]) {
 			case 'A': $numVez = 10; break;
 			case 'B': $numVez = 11; break;
 			case 'C': $numVez = 12; break;
@@ -1187,7 +1207,7 @@ function parseDec($hex) {
 	return $num;
 }
 
-function pot($num, $exp) { 
+function pot($num, $exp) {
 	$total = 1;
 	for ($i = 0; $i < $exp; $i++) $total *= $num;
 	return $total;
