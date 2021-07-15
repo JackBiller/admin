@@ -633,6 +633,16 @@ function initComponet() {
 				)
 			);
 
+			if ((data['color-holder_sidebar'] || '') != '') {
+				$(".titulo_projeto").parent().css('background-color', data['color-holder_sidebar']);
+			}
+
+			if ((data.perfilPage || '') != '') {
+				$(".user-footer").find(".pull-left").find('a')
+					.data('file', data.perfilPage.file)
+					.click(function() { abrirConteudo(this, data.perfilPage.desc); });
+			}
+
 			if (((data.foot || {}).developer || '') != '') $("#developerFoot").html(data.foot.developer);
 			if ((data.version || '') != '') $("#verionFoot").html(data.version);
 
