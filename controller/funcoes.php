@@ -731,6 +731,44 @@ function arrayEmJson($array) {
 }
 
 /**********************************************************************************************/
+/* OUTRAS FUNÇÕES DA SEVENPAY */
+/**********************************************************************************************/
+function returnPixel($service, $id_pixel, $event, $options=array()) {
+	$pixel = '';
+	switch ($service) {
+		case 'facebook':
+			$pixel = ''
+				. "\n<!-- Facebook Pixel Code -->"
+				. "\n<script>"
+				. "\n!function(f,b,e,v,n,t,s)"
+				. "\n{if(f.fbq)return;n=f.fbq=function(){n.callMethod?"
+				. "\nn.callMethod.apply(n,arguments):n.queue.push(arguments)};"
+				. "\nif(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';"
+				. "\nn.queue=[];t=b.createElement(e);t.async=!0;"
+				. "\nt.src=v;s=b.getElementsByTagName(e)[0];"
+				. "\ns.parentNode.insertBefore(t,s)}(window, document,'script',"
+				. "\n'https://connect.facebook.net/en_US/fbevents.js');"
+				. "\nfbq('init', '$id_pixel');"
+				. "\nfbq('track', '$event'"
+				. (!isset($options['paramsEvent']) ? '' : ''
+					. ", "
+					. (gettype($options['paramsEvent']) == 'string' 
+						? $options['paramsEvent'] : json_encode($options['paramsEvent'])
+					)
+				)
+				. ");"
+				. "\n</script>"
+				. "\n<noscript><img height=\"1\" width=\"1\" style=\"display:none\""
+				. "\nsrc=\"https://www.facebook.com/tr?id=$id_pixel&ev=$event&noscript=1\""
+				. "\n/></noscript>"
+				. "\n<!-- End Facebook Pixel Code -->";
+			break;
+		default: $pixel = ''; break;
+	}
+	return $pixel;
+}
+
+/**********************************************************************************************/
 /* OUTRAS FUNÇÕES DO ARQUIVO SANHIDREL funcoes.php */
 /**********************************************************************************************/
 /** FUNÇÕES COM DATAS */
