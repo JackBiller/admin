@@ -78,7 +78,7 @@ function resolvAbaMenu(array) {
 			+ 	">"
 			+ 		"<div class='box box-solid box-default' data-widget='box-widget'>"
 			+ 			"<div class='box-header'>"
-			+ 				"<h3 class='box-title'>"+array[i].desc+"</h3>"
+			+ 				"<h3 class='box-title'>" + array[i].desc + "</h3>"
 			+ 			"</div>"
 			+ 			"<div class='box-body'>"
 			+ 				"<center>"
@@ -91,47 +91,86 @@ function resolvAbaMenu(array) {
 	$("#conteudoAbaMenu").html(html);
 }
 
-function resolveMenu(menu) {
+function resolveMenu(menu, template='adminLTE') {
 	var html = "", linkMenu_i;
 	for (var i = 0; i < menu.length; i++) {
 		if ((menu[i].header || '') != '')
-			html += "<li class=\"header\">" + menu[i].header + "</li>"
+			html += template == 'adminLTE'
+				? "<li class=\"header\">" + menu[i].header + "</li>"
+				: "<li class=\"app-sidebar__heading\">" + menu[i].header + "</li>"
+				;
 		else if ((menu[i].itens || '') == '')
-			html += "<li class=\"treeview\">"
-				+ 		"<a href=\"#\" data-file=\"" + menu[i].file + "\" "
-				+ 			"onclick=\"abrirConteudo(this,'" + (menu[i].desc || '') + "');\""
-				+ 		">"
-				+ 			(menu[i].desc || '')
-				+ 		"</a>"
-				// + 		"<ul class=\"treeview-menu\">"
-				// + 			"<li><a href=\"principal.html\"><i class=\"fa fa-circle-o\"></i> Principal</a></li>"
-				// + 		"</ul>"
-				+ 	"</li>"
+			html += template == 'adminLTE'
+				? ""
+					+ 	"<li class=\"treeview\">"
+					+ 		"<a href=\"#\" data-file=\"" + menu[i].file + "\" "
+					+ 			"onclick=\"abrirConteudo(this,'" + (menu[i].desc || '') + "');\""
+					+ 		">"
+					+ 			(menu[i].desc || '')
+					+ 		"</a>"
+					// + 		"<ul class=\"treeview-menu\">"
+					// + 			"<li><a href=\"principal.html\"><i class=\"fa fa-circle-o\"></i> Principal</a></li>"
+					// + 		"</ul>"
+					+ 	"</li>"
+				: ""
+					+ 	"<li" + (i == 0 ? ' class="mm-active"' : '') + ">"
+					+ 		"<a href=\"#\" data-file=\"" + menu[i].file + "\""
+					+ 			"onclick=\"abrirConteudo(this,'" + (menu[i].desc || '') + "');\""
+					+ 		">"
+					+ ((menu[i].icon || '') == '' ? '' : ''
+						+ 		"<i class=\"metismenu-icon " + menu[i].icon + "\"></i>"
+					)
+					+ 			(menu[i].desc || '')
+					+ 		"</a>"
+					+ 	"</li>"
+				;
 		else {
 			linkMenu_i = ((menu[i].file || '') == '' ? '' : menu[i].file + ",") + menu[i].desc;
 
-			html += ""
-				+ 	"<li class=\"treeview\">"
-				+ 		"<a href=\"#\">"
-				+ 			"<span>" + menu[i].desc + "</span>"
-				+ 			"<span class=\"pull-right-container\">"
-				+ 				"<i class=\"fa fa-angle-left pull-right\"></i>"
-				+ 			"</span>"
-				+ 		"</a>"
-				+ 		"<ul class=\"treeview-menu\">"
+			html += template == 'adminLTE'
+				? ""
+					+ 	"<li class=\"treeview\">"
+					+ 		"<a href=\"#\">"
+					+ 			"<span>" + menu[i].desc + "</span>"
+					+ 			"<span class=\"pull-right-container\">"
+					+ 				"<i class=\"fa fa-angle-left pull-right\"></i>"
+					+ 			"</span>"
+					+ 		"</a>"
+					+ 		"<ul class=\"treeview-menu\">"
+				: ""
+					+ 	"<li" + (i == 0 ? ' class="mm-active"' : '') + ">"
+					+ 		"<a href=\"#\">"
+					+ ((menu[i].icon || '') == '' ? '' : ''
+						+ 		"<i class=\"metismenu-icon " + menu[i].icon + "\"></i>"
+					)
+					+ 			(menu[i].desc || '')
+					+ 			"<i class=\"metismenu-state-icon pe-7s-angle-down caret-left\"></i>"
+					+ 		"</a>"
+					+ 		"<ul>"
+				;
 			for (var j = 0; j < menu[i].itens.length; j++) {
 				if (
 					parseInt(usuario_Global.CK_ADMIN || 0) == 1 ||
 					(menu[i].itens[j].admin || '') == ''
 				) {
-					html += ""
-						+ 	"<li>"
-						+ 		"<a href=\"#\" data-file=\"" + menu[i].itens[j].file + "\""
-						+ 			" onclick=\"abrirConteudo(this,'" + menu[i].itens[j].desc + "','" + linkMenu_i + "');\""
-						+ 		">"
-						+ 			"<i class=\"fa fa-circle-o\"></i> " + menu[i].itens[j].desc
-						+ 		"</a>"
-						+ 	"</li>"
+					html += template == 'adminLTE'
+						? ""
+							+ 	"<li>"
+							+ 		"<a href=\"#\" data-file=\"" + menu[i].itens[j].file + "\""
+							+ 			" onclick=\"abrirConteudo(this,'" + menu[i].itens[j].desc + "','" + linkMenu_i + "');\""
+							+ 		">"
+							+ 			"<i class=\"fa fa-circle-o\"></i> " + menu[i].itens[j].desc
+							+ 		"</a>"
+							+ 	"</li>"
+						: ""
+							+ 	"<li>"
+							+ 		"<a href=\"#\" data-file=\"" + menu[i].itens[j].file + "\""
+							+ 			" onclick=\"abrirConteudo(this,'" + menu[i].itens[j].desc + "','" + linkMenu_i + "');\""
+							+ 		">"
+							+ 			"<i class=\"metismenu-icon\"></i> " + menu[i].itens[j].desc
+							+ 		"</a>"
+							+ 	"</li>"
+						;
 				}
 			}
 			html += ""
@@ -556,29 +595,21 @@ function logoff() {
 }
 
 function initComponet() {
-	$("body").append(
-		'<style>'
-			+'h1 {'
-				+'font-family: Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif;'
-				+'font-size: 24px; font-style: normal; font-variant: normal;font-weight: 700;'
-				+'line-height: 26.4px; }'
-			+'h3 {'
-				+'font-family: Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif;'
-				+'font-size: 14px; font-style: normal; font-variant: normal; font-weight: 700;'
-				+'line-height: 15.4px; }'
-			+'p {'
-				+'font-family: Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif;'
-				+'font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400;'
-				+'line-height: 20px; }'
-			+'blockquote {'
-				+'font-family: Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif;'
-				+'font-size: 21px; font-style: normal; font-variant: normal; font-weight: 400;'
-				+'line-height: 30px; }'
-			+'pre {'
-				+'font-family: Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif;'
-				+'font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400;'
-				+'line-height: 18.5714px; }'
-		+'</style>'
+	$("body").append(''
+		+ '<style>'
+		+ 	'h1, h3, p, blockquote, pre {'
+		+ 		'font-family: Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif;'
+		+ 		'font-style: normal;'
+		+ 		'font-variant: normal;'
+		+ 	'}'
+		+ 	'h1, h3 { font-weight: 700; }'
+		+ 	'p, blockquote, pre { font-weight: 400; }'
+		+ 	'h1 '			+ '{ font-size: 24px; line-height: 26.4px; }'
+		+ 	'h3 '			+ '{ font-size: 14px; line-height: 15.4px; }'
+		+ 	'p '			+ '{ font-size: 14px; line-height: 20px; }'
+		+ 	'blockquote '	+ '{ font-size: 21px; line-height: 30px; }'
+		+ 	'pre '			+ '{ font-size: 13px; line-height: 18.5714px; }'
+		+ '</style>'
 		+ `<div class="modal fade" id="modalGenerico" role="dialog">`
 		+ 	`<div class="modal-dialog">`
 		+ 		`<div class="modal-content">`
@@ -609,7 +640,7 @@ function initComponet() {
 	// $(".foto-user").attr("src","../img/perfil/" + JSON.parse(localStorage.getItem('usuario')).ID_USUARIO + ".png");
 	// $(".btn-logoff").attr('onclick', function(){ logoff(); });
 	// $(".linkProduto")[0].onclick = function(){  }
-	$('.sidebar-menu').tree();
+	try { $('.sidebar-menu').tree(); } catch(e) {}
 	$(".nome_usuario").html(JSON.parse(localStorage.getItem('usuario')).NOME);
 	$(".btn-logoff")[0].onclick = function(){ logoff(); }
 	abrirConteudo($(document.createElement('span')).attr('data-file','main'),'Principal');
@@ -664,7 +695,7 @@ function initComponet() {
 			console.log(dataMenu);
 			dataMenu = JSON.parse(dataMenu);
 			console.log(dataMenu);
-			$(".sidebar-menu").html( resolveMenu(dataMenu) );
+			$(".sidebar-menu").html(resolveMenu(dataMenu.menu, (dataMenu.template || 'adminLTE')));
 		}
 	}
 

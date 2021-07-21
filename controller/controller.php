@@ -55,6 +55,9 @@ if (!empty($_POST['getConfigPrincipal'])) {
 	$config->principal->nome_projeto = $config->nome_projeto;
 	if (isset($config->colorLoadAlert))
 		$config->principal->colorLoadAlert = $config->colorLoadAlert;
+
+	$config->principal->template = isset($config->template) 
+		? $config->template : 'adminLTE';
 	echo json_encode($config->principal);
 }
 
@@ -63,6 +66,7 @@ if (!empty($_POST['getMenu'])) {
 		var $header;
 		var $desc;
 		var $file;
+		var $icon;
 		var $itens = array();
 	}
 
@@ -96,6 +100,8 @@ if (!empty($_POST['getMenu'])) {
 				$itemMenuParentAcesso->set($itemMenuParent->desc, 'desc');
 				if (!empty($itemMenuParent->file)) 
 					$itemMenuParentAcesso->set($itemMenuParent->file, 'file');
+				if (!empty($itemMenuParent->icon)) 
+					$itemMenuParentAcesso->set($itemMenuParent->icon, 'icon');
 
 				// Verfica se tem itens de menu
 				if (!empty($itemMenuParent->itens)) {
@@ -131,7 +137,10 @@ if (!empty($_POST['getMenu'])) {
 			$menuAcesso[$indice] = $itemMenuParentAcesso;
 		}
 	}
-	echo toJson($menuAcesso);
+	echo  '{'
+		. 	'"template":"' . (isset($config->template) ? $config->template : 'adminLTE') . '",'
+		. 	'"menu":' . toJson($menuAcesso)
+		. '}';
 }
 
 if (!empty($_POST['loadView'])) {
