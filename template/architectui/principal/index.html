@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="pt-br">
+
+<head>
+	<script>
+		setTimeout(function() { 
+			if (window.location.href.indexOf('http://') == 0) {
+				return window.location.assign(window.location.href.replace('http','https'));
+			}
+	
+			if (!localStorage.usuario) window.location.assign('../index.html');
+		}, 100);
+	</script>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta http-equiv="Content-Language" content="en">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>SevenPay</title>
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" />
+
+	<!-- Disable tap highlight on IE -->
+	<meta name="msapplication-tap-highlight" content="no">
+
+	<!-- <link rel="stylesheet" href="../biblioteca/assets/css/base.min.css"> -->
+	<link rel="stylesheet" href="../biblioteca/assets/css/base.css">
+	<script>
+		var ext = (window.location.href.split('.')[1] || '').split('?')[0].split('#')[0];
+		if ((['html','php','htm']).indexOf(ext) != -1) {
+			var url = window.location.href.split('/');
+			window.location.assign(url.splice(0,url.length-1).join('/'));
+		}
+	</script>
+</head>
+
+<body>
+	<div class="app-container app-theme-white body-tabs-shadow fixed-header fixed-sidebar">
+		<!--Header START-->
+		<!--  bg-dark header-text-light -->
+		<div class="app-header header-shadow header-text-dark">
+			<div class="app-header__logo">
+				<div class="logo-src text-center"></div>
+				<div class="header__pane ml-auto">
+					<div>
+						<button type="button" class="hamburger close-sidebar-btn hamburger--elastic"
+							data-class="closed-sidebar">
+							<span class="hamburger-box">
+								<span class="hamburger-inner"></span>
+							</span>
+						</button>
+					</div>
+				</div>
+			</div>
+			<div class="app-header__mobile-menu">
+				<div>
+					<button type="button" class="hamburger hamburger--elastic mobile-toggle-nav">
+						<span class="hamburger-box">
+							<span class="hamburger-inner"></span>
+						</span>
+					</button>
+				</div>
+			</div>
+			<div class="app-header__menu">
+				<span>
+					<button type="button"
+						class="btn-icon btn-icon-only btn btn-primary btn-sm mobile-toggle-header-nav">
+						<span class="btn-icon-wrapper">
+							<i class="fa fa-ellipsis-v fa-w-6"></i>
+						</span>
+					</button>
+				</span>
+			</div>
+			<div class="app-header__content">
+				<div class="app-header-left"></div>
+				<div class="app-header-right">
+					<div class="header-btn-lg pr-0">
+						<div class="widget-content p-0">
+							<div class="widget-content-wrapper">
+								<div class="widget-content-left">
+									<div class="btn-group">
+										<a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn">
+											<img width="42" class="rounded-circle foto-user" alt="Foto do Perfil" src="../img/user.png"
+												onerror="if (this.src != 'error.jpg') this.src = '../img/user.png';"
+											>
+											<span class="nome_usuario">ADMINISTRADOR</span>
+											<i class="fa fa-angle-down ml-2 opacity-8"></i>
+										</a>
+										<div tabindex="-1" role="menu" aria-hidden="true"
+											class="rm-pointers dropdown-menu-lg dropdown-menu dropdown-menu-right">
+											<div class="dropdown-menu-header">
+												<div class="dropdown-menu-header-inner bg-dark">
+													<div class="menu-header-image opacity-2"
+														style="background-image: url('../biblioteca/assets/images/dropdown-header/abstract2.jpg');">
+													</div>
+													<div class="menu-header-content text-left">
+														<div class="widget-content p-0">
+															<div class="widget-content-wrapper">
+																<div class="widget-content-left mr-3">
+																	<img width="42" class="rounded-circle foto-user" alt="Foto do Perfil"
+																		src="../img/user.png"
+																		onerror="if (this.src != 'error.jpg') this.src = '../img/user.png';"
+																	>
+																</div>
+																<div class="widget-content-left">
+																	<div class="widget-heading" style="color: white;">
+																		<span class="nome_usuario">ADMINISTRADOR</span>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<ul class="nav flex-column">
+												<li class="nav-item-btn text-center nav-item">
+													<!-- <button class="btn-wide btn btn-primary btn-sm"> -->
+													<button class="btn-pill btn-shadow btn-shine btn btn-focus">
+														Perfil
+													</button>
+													&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+													<button class="btn-pill btn-shadow btn-shine btn btn-focus btn-logoff">
+														Logout
+													</button>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--Header END-->
+		<div class="app-main">
+			<!-- app-sidebar sidebar-shadow bg-danger sidebar-text-light -->
+			<!-- app-sidebar sidebar-shadow bg-light sidebar-text-dark -->
+			<!-- <div class="app-sidebar sidebar-shadow"> -->
+			<!-- <div class="app-sidebar sidebar-shadow sidebar-text-dark"> -->
+			<div class="app-sidebar sidebar-shadow bg-premium-dark sidebar-text-light">
+				<div class="app-header__logo">
+					<div class="logo-src"></div>
+					<div class="header__pane ml-auto">
+						<div>
+							<button type="button" class="hamburger close-sidebar-btn hamburger--elastic"
+								data-class="closed-sidebar">
+								<span class="hamburger-box">
+									<span class="hamburger-inner"></span>
+								</span>
+							</button>
+						</div>
+					</div>
+				</div>
+				<div class="app-header__mobile-menu">
+					<div>
+						<button type="button" class="hamburger hamburger--elastic mobile-toggle-nav">
+							<span class="hamburger-box">
+								<span class="hamburger-inner"></span>
+							</span>
+						</button>
+					</div>
+				</div>
+				<div class="app-header__menu">
+					<span>
+						<button type="button"
+							class="btn-icon btn-icon-only btn btn-primary btn-sm mobile-toggle-header-nav">
+							<span class="btn-icon-wrapper">
+								<i class="fa fa-ellipsis-v fa-w-6"></i>
+							</span>
+						</button>
+					</span>
+				</div>
+				<div class="scrollbar-sidebar">
+					<div class="app-sidebar__inner">
+						<ul class="vertical-nav-menu sidebar-menu"></ul>
+					</div>
+				</div>
+			</div>
+			<div class="app-main__outer">
+				<div class="app-main__inner">
+					<div class="app-page-title" style="padding: 10px;padding-left:20px;">
+						<div class="page-title-wrapper">
+							<div class="page-title-heading">Principal</div>
+							<div class="page-title-actions">
+								<div class="page-title-subheading opacity-10">
+									<nav class="" aria-label="breadcrumb">
+										<ol class="breadcrumb">
+											<li class="breadcrumb-item">
+												<a>Principal</a>
+											</li>
+											<li class="breadcrumb-item">
+												<a>Checkout</a>
+											</li>
+											<li class="active breadcrumb-item" aria-current="page">
+												Configuração Geral
+											</li>
+										</ol>
+									</nav>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<section class="content">
+						<div class="box" id="conteudo_pagina">
+							<div class="mb-3 card">
+								<div class="card-header-tab card-header">
+									<div class="card-header-title font-size-lg text-capitalize font-weight-normal">
+										<span class="box-title">Olá, <span id="nome_usuario">usuário</span>!</span>
+									</div>
+									<div class="btn-actions-pane-right text-capitalize">
+										<!-- <i class="fa fa-times"></i> -->
+									</div>
+								</div>
+								<div class="no-gutters row">
+									Essa é a tela principal do sistema
+								</div>
+								<!-- <div class="text-center d-block p-3 card-footer"></div> -->
+							</div>
+						</div>
+					</section>
+				</div>
+
+				<div class="app-wrapper-footer">
+					<div class="app-footer">
+						<div class="app-footer__inner">
+							<div class="app-footer-left">
+								<div class="footer-dots">
+									<strong>Criado por <spam id="developerFoot">SevenPay Pagamentos Ltda</spam>.</strong> 
+									Todos os direitos reservados.
+								</div>
+							</div>
+							<div class="app-footer-right">
+								<b>Versão</b> <span id="verionFoot">1.0</span>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<script src="../biblioteca/assets/lib/jquery/jquery-3.3.1.min.js"></script>
+	<script src="../biblioteca/assets/lib/bootstrap-bundle/bootstrap.bundle.min.js"></script>
+	<script src="../biblioteca/assets/lib/metismenu/metismenu.min.js"></script>
+	<script src="../biblioteca/assets/js/scripts-init/app.js"></script>
+	<script src="../biblioteca/assets/js/scripts-init/demo.js"></script>
+	<script src="../biblioteca/assets/js/vendors/charts/apex-charts.js"></script>
+	<script src="../biblioteca/assets/js/scripts-init/charts/apex-charts.js"></script>
+	<script src="../biblioteca/assets/js/scripts-init/charts/apex-series.js"></script>
+	<script src="../biblioteca/assets/js/vendors/charts/charts-sparklines.js"></script>
+	<script src="../biblioteca/assets/js/scripts-init/charts/charts-sparklines.js"></script>
+	<script src="../biblioteca/assets/lib/Chart.js/Chart.min.js"></script>
+	<script src="../biblioteca/assets/js/scripts-init/charts/chartsjs-utils.js"></script>
+	<script src="../biblioteca/assets/js/scripts-init/charts/chartjs.js"></script>
+	<script src="../biblioteca/assets/js/vendors/form-components/clipboard.js"></script>
+	<script src="../biblioteca/assets/js/scripts-init/form-components/clipboard.js"></script>
+	<script src="../biblioteca/assets/js/vendors/form-components/datepicker.js"></script>
+	<script src="../biblioteca/assets/js/vendors/form-components/daterangepicker.js"></script>
+	<script src="../biblioteca/assets/js/vendors/form-components/moment.js"></script>
+	<script src="../biblioteca/assets/js/scripts-init/form-components/datepicker.js"></script>
+	<script src="../biblioteca/assets/js/vendors/form-components/bootstrap-multiselect.js"></script>
+	<script src="../biblioteca/assets/lib/select2/select2.min.js"></script>
+	<script src="../biblioteca/assets/js/scripts-init/form-components/input-select.js"></script>
+	<script src="../biblioteca/assets/js/vendors/form-components/form-validation.js"></script>
+	<script src="../biblioteca/assets/js/scripts-init/form-components/form-validation.js"></script>
+	<script src="../biblioteca/assets/js/vendors/form-components/form-wizard.js"></script>
+	<script src="../biblioteca/assets/js/scripts-init/form-components/form-wizard.js"></script>
+	<script src="../biblioteca/assets/js/vendors/form-components/input-mask.js"></script>
+	<script src="../biblioteca/assets/js/scripts-init/form-components/input-mask.js"></script>
+	<script src="../biblioteca/assets/js/vendors/form-components/wnumb.js"></script>
+	<script src="../biblioteca/assets/js/vendors/form-components/range-slider.js"></script>
+	<script src="../biblioteca/assets/js/scripts-init/form-components/range-slider.js"></script>
+	<script src="../biblioteca/assets/js/vendors/form-components/textarea-autosize.js"></script>
+	<script src="../biblioteca/assets/js/scripts-init/form-components/textarea-autosize.js"></script>
+	<script src="../biblioteca/assets/js/vendors/form-components/toggle-switch.js"></script>
+	<script src="../biblioteca/assets/js/vendors/blockui.js"></script>
+	<script src="../biblioteca/assets/js/scripts-init/blockui.js"></script>
+	<script src="../biblioteca/assets/js/vendors/calendar.js"></script>
+	<script src="../biblioteca/assets/js/scripts-init/calendar.js"></script>
+	<script src="../biblioteca/assets/js/vendors/carousel-slider.js"></script>
+	<script src="../biblioteca/assets/js/scripts-init/carousel-slider.js"></script>
+	<script src="../biblioteca/assets/js/vendors/circle-progress.js"></script>
+	<script src="../biblioteca/assets/js/scripts-init/circle-progress.js"></script>
+	<script src="../biblioteca/assets/js/vendors/count-up.js"></script>
+	<script src="../biblioteca/assets/js/scripts-init/count-up.js"></script>
+	<script src="../biblioteca/assets/js/vendors/cropper.js"></script>
+	<script src="../biblioteca/assets/js/vendors/jquery-cropper.js"></script>
+	<script src="../biblioteca/assets/js/scripts-init/image-crop.js"></script>
+	<script src="../biblioteca/assets/js/vendors/gmaps.js"></script>
+	<script src="../biblioteca/assets/js/vendors/jvectormap.js"></script>
+	<script src="../biblioteca/assets/js/scripts-init/maps-word-map.js"></script>
+	<script src="../biblioteca/assets/js/scripts-init/maps.js"></script>
+	<script src="../biblioteca/assets/js/vendors/guided-tours.js"></script>
+	<script src="../biblioteca/assets/js/scripts-init/guided-tours.js"></script>
+	<script src="../biblioteca/assets/js/vendors/ladda-loading.js"></script>
+	<script src="../biblioteca/assets/js/vendors/spin.js"></script>
+	<script src="../biblioteca/assets/js/scripts-init/ladda-loading.js"></script>
+	<script src="../biblioteca/assets/js/vendors/rating.js"></script>
+	<script src="../biblioteca/assets/js/scripts-init/rating.js"></script>
+	<script src="../biblioteca/assets/js/vendors/scrollbar.js"></script>
+	<script src="../biblioteca/assets/js/scripts-init/scrollbar.js"></script>
+	<script src="../biblioteca/assets/lib/toastr/toastr.min.js"></script>
+	<script src="../biblioteca/assets/js/scripts-init/toastr.js"></script>
+	<script src="../biblioteca/assets/lib/sweetalert2@8/sweetalert2@8.min.js"></script>
+	<script src="../biblioteca/assets/js/scripts-init/sweet-alerts.js"></script>
+	<script src="../biblioteca/assets/js/vendors/treeview.js"></script>
+	<script src="../biblioteca/assets/js/scripts-init/treeview.js"></script>
+	<script src="../biblioteca/assets/lib/dataTables/jquery.dataTables.min.js"></script>
+	<script src="../biblioteca/assets/lib/dataTables/dataTables.bootstrap4.min.js"></script>
+	<script src="../biblioteca/assets/lib/dataTables/dataTables.responsive.min.js"></script>
+	<script src="../biblioteca/assets/lib/dataTables/responsive.bootstrap.min.js"></script>
+	<script src="../biblioteca/assets/js/vendors/tables.js"></script>
+	<script src="../biblioteca/assets/js/scripts-init/tables.js"></script>
+	<script src="../biblioteca/bower_components/platform/platform.js"></script>
+
+<script>
+var usuario_Global = JSON.parse(localStorage.getItem('usuario'));
+
+$(document).ready(function() {
+	// importLib("../js/resolvConfig.min.js");
+	importLib("../js/resolvConfig.full.js");
+	importLib("../script.js");
+	preInit();
+});
+
+function logoff() {
+	if (!confirm('Deseja sair da aplicação?')) return false;
+	localStorage.removeItem('usuario');
+	window.location.assign('index.html');
+}
+
+function updateUser() {
+	ajax({
+		param: { 'updateUser': true },
+		done: function(data) {
+			data = JSON.parse(data);
+			if (data.debug == 'OK') {
+				usuario_Global = data;
+				localStorage.setItem('usuario', JSON.stringify(usuario_Global));
+			} else if (data.debug != 'NO_VALID') {
+				alert(data.debug, { icon: 'info' });
+				localStorage.removeItem('usuario');
+				setTimeout(function() {
+					window.location.assign('../');
+				}, 2000);
+			}
+		}
+	});
+}
+
+function preInit() {
+	if (window['objParamGrade_Global'] != undefined &&
+		window['ajax'] != undefined
+	) {
+		initComponet();
+	} else {
+		setTimeout(function() { preInit(); }, 10);
+	}
+}
+
+function importLib(path) {
+	let ext = (path.split('.')).pop();
+	if (['js','css'].indexOf(ext.toLowerCase()) < 0) return false;
+
+	return new Promise(function (resolve, reject) {
+		let client = new XMLHttpRequest();
+		client.open("HEAD", path, true);
+		client.onreadystatechange = function() {
+			if (this.readyState == 2) {
+				path += '?' + client.getResponseHeader("Last-Modified")
+				$('body').append(
+					ext.toLowerCase() == 'js'
+					? `<script src="${path}"></`+`script>`
+					: `<link rel="stylesheet" href="${path}">`
+				);
+			}
+		}
+		client.send();
+	});
+}
+</script>
+</body>
+</html>

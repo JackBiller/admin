@@ -1,0 +1,154 @@
+Themes from template
+
+Cores Cabeçalho
+
+bg-primary header-text-light
+bg-secondary header-text-light
+bg-success header-text-light
+bg-info header-text-light
+bg-warning header-text-dark
+bg-danger header-text-light
+bg-light header-text-dark
+bg-dark header-text-light
+bg-focus header-text-light
+bg-alternate header-text-light
+bg-vicious-stance header-text-light
+bg-midnight-bloom header-text-light
+bg-night-sky header-text-light
+bg-slick-carbon header-text-light
+bg-asteroid header-text-light
+bg-royal header-text-light
+bg-warm-flame header-text-dark
+bg-night-fade header-text-dark
+bg-sunny-morning header-text-dark
+bg-tempting-azure header-text-dark
+bg-amy-crisp header-text-dark
+bg-heavy-rain header-text-dark
+bg-mean-fruit header-text-dark
+bg-malibu-beach header-text-light
+bg-deep-blue header-text-dark
+bg-ripe-malin header-text-light
+bg-arielle-smile header-text-light
+bg-plum-plate header-text-light
+bg-happy-fisher header-text-dark
+bg-happy-itmeo header-text-light
+bg-mixed-hopes header-text-light
+bg-strong-bliss header-text-light
+bg-grow-early header-text-light
+bg-love-kiss header-text-light
+bg-premium-dark header-text-light
+bg-happy-green header-text-light
+
+
+-----------------------------------------------------------------------------------------------------------
+
+Cores Menu
+
+bg-primary sidebar-text-light
+bg-secondary sidebar-text-light
+bg-success sidebar-text-dark
+bg-info sidebar-text-dark
+bg-warning sidebar-text-dark
+bg-danger sidebar-text-light
+bg-light sidebar-text-dark
+bg-dark sidebar-text-light
+bg-focus sidebar-text-light
+bg-alternate sidebar-text-light
+bg-vicious-stance sidebar-text-light
+bg-midnight-bloom sidebar-text-light
+bg-night-sky sidebar-text-light
+bg-slick-carbon sidebar-text-light
+bg-asteroid sidebar-text-light
+bg-royal sidebar-text-light
+bg-warm-flame sidebar-text-dark
+bg-night-fade sidebar-text-dark
+bg-sunny-morning sidebar-text-dark
+bg-tempting-azure sidebar-text-dark
+bg-amy-crisp sidebar-text-dark
+bg-heavy-rain sidebar-text-dark
+bg-mean-fruit sidebar-text-dark
+bg-malibu-beach sidebar-text-light
+bg-deep-blue sidebar-text-dark
+bg-ripe-malin sidebar-text-light
+bg-arielle-smile sidebar-text-light
+bg-plum-plate sidebar-text-light
+bg-happy-fisher sidebar-text-dark
+bg-happy-itmeo sidebar-text-light
+bg-mixed-hopes sidebar-text-light
+bg-strong-bliss sidebar-text-light
+bg-grow-early sidebar-text-light
+bg-love-kiss sidebar-text-light
+bg-premium-dark sidebar-text-light
+bg-happy-green sidebar-text-light
+
+
+-----------------------------------------------------------------------------------------------------------
+
+Preview das Cores
+
+swatch-holder bg-primary switch-sidebar-cs-class
+swatch-holder bg-secondary switch-sidebar-cs-class
+swatch-holder bg-success switch-sidebar-cs-class
+swatch-holder bg-info switch-sidebar-cs-class
+swatch-holder bg-warning switch-sidebar-cs-class
+swatch-holder bg-danger switch-sidebar-cs-class
+swatch-holder bg-light switch-sidebar-cs-class
+swatch-holder bg-dark switch-sidebar-cs-class
+swatch-holder bg-focus switch-sidebar-cs-class
+swatch-holder bg-alternate switch-sidebar-cs-class
+swatch-holder bg-vicious-stance switch-sidebar-cs-class
+swatch-holder bg-midnight-bloom switch-sidebar-cs-class
+swatch-holder bg-night-sky switch-sidebar-cs-class
+swatch-holder bg-slick-carbon switch-sidebar-cs-class
+swatch-holder bg-asteroid switch-sidebar-cs-class
+swatch-holder bg-royal switch-sidebar-cs-class
+swatch-holder bg-warm-flame switch-sidebar-cs-class
+swatch-holder bg-night-fade switch-sidebar-cs-class
+swatch-holder bg-sunny-morning switch-sidebar-cs-class
+swatch-holder bg-tempting-azure switch-sidebar-cs-class
+swatch-holder bg-amy-crisp switch-sidebar-cs-class
+swatch-holder bg-heavy-rain switch-sidebar-cs-class
+swatch-holder bg-mean-fruit switch-sidebar-cs-class
+swatch-holder bg-malibu-beach switch-sidebar-cs-class
+swatch-holder bg-deep-blue switch-sidebar-cs-class
+swatch-holder bg-ripe-malin switch-sidebar-cs-class
+swatch-holder bg-arielle-smile switch-sidebar-cs-class
+swatch-holder bg-plum-plate switch-sidebar-cs-class
+swatch-holder bg-happy-fisher switch-sidebar-cs-class
+swatch-holder bg-happy-itmeo switch-sidebar-cs-class
+swatch-holder bg-mixed-hopes switch-sidebar-cs-class
+swatch-holder bg-strong-bliss switch-sidebar-cs-class
+swatch-holder bg-grow-early switch-sidebar-cs-class
+swatch-holder bg-love-kiss switch-sidebar-cs-class
+swatch-holder bg-premium-dark switch-sidebar-cs-class
+swatch-holder bg-happy-green switch-sidebar-cs-class
+
+
+-----------------------------------------------------------------------------------------------------------
+
+Class de background-color
+
+.bg-warm-flame
+.bg-night-fade
+.bg-sunny-morning
+.bg-tempting-azure
+.bg-amy-crisp
+.bg-heavy-rain
+.bg-mean-fruit
+.bg-malibu-beach
+.bg-deep-blue
+.bg-ripe-malin
+.bg-arielle-smile
+.bg-plum-plate
+.bg-happy-fisher
+.bg-happy-itmeo
+.bg-mixed-hopes
+.bg-strong-bliss
+.bg-grow-early
+.bg-love-kiss
+.bg-premium-dark
+.bg-happy-green
+.bg-vicious-stance
+.bg-midnight-bloom
+.bg-night-sky
+.bg-slick-carbon
