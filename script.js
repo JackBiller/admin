@@ -513,17 +513,31 @@ function abrirConteudo(el, titulo) {
 
 	if (titulo == 'Principal') {
 		$(".breadcrumb").html(""
-			+ "<li class='active'>Principal</li>"
+			+ (template_Global == 'adminLTE'
+				? "<li class='active'>Principal</li>"
+				: "<li class=\"active breadcrumb-item\" aria-current=\"page\">Principal</li>"
+			)
 		)
 	} else {
 		$(".breadcrumb").html(""
-			+ "<li><a href='#' data-file='main' onclick='abrirConteudo(this, \"Principal\")'>Principal</a></li>"
+			+ (template_Global == 'adminLTE'
+				? "<li><a href='#' data-file='main' onclick='abrirConteudo(this, \"Principal\")'>Principal</a></li>"
+				: ""
+					+ 	"<li class=\"breadcrumb-item\">"
+					+ 		"<a href='#' data-file='main' onclick='abrirConteudo(this, \"Principal\")'>"
+					+ 			"Principal"
+					+ 		"</a>"
+					+ 	"</li>"
+			)
 			+ (arg.length < 2 ? '' : ""
 				+ (function(args) {
 					var html = '';
 					for (var i = args.length-1; i >= 2; i--) {
 						html += ""
-							+ "<li>"
+							+ (template_Global == 'adminLTE'
+								? "<li>"
+								: "<li class=\"breadcrumb-item\">"
+							)
 							+ (args[i].split(',').length < 2 ? args[i].split(',')[0] : ''
 								+ 	"<a href='#' data-file='" + args[i].split(',')[0] + "'"
 								+ 		" onclick='abrirConteudo(this,\"" + args[i].split(',')[1] + "\""
@@ -545,7 +559,10 @@ function abrirConteudo(el, titulo) {
 					return html;
 				}(arg))
 			)
-			+ "<li class='active'>" + titulo + "</li>"
+			+ (template_Global == 'adminLTE'
+				? "<li class='active'>" + titulo + "</li>"
+				: "<li class=\"active breadcrumb-item\" aria-current=\"page\">" + titulo + "</li>"
+			)
 		)
 	}
 
@@ -594,7 +611,10 @@ function logoff() {
 	window.location.assign('../index.html');
 }
 
+var template_Global = 'adminLTE';
 function initComponet() {
+	var bootstrap = $.fn.tooltip.Constructor.VERSION.slice(0,1);
+
 	$("body").append(''
 		+ '<style>'
 		+ 	'h1, h3, p, blockquote, pre {'
@@ -610,21 +630,40 @@ function initComponet() {
 		+ 	'blockquote '	+ '{ font-size: 21px; line-height: 30px; }'
 		+ 	'pre '			+ '{ font-size: 13px; line-height: 18.5714px; }'
 		+ '</style>'
-		+ `<div class="modal fade" id="modalGenerico" role="dialog">`
-		+ 	`<div class="modal-dialog">`
-		+ 		`<div class="modal-content">`
-		+ 			`<div class="modal-header">`
-		+ 				`<button type="button" class="close" id="modalCloseGenerico" data-dismiss="modal">&times;</button>`
-		+ 				`<h4 class="modal-title" id="modalHeadGenerico"></h4>`
-		+ 			`</div>`
-		+ 			`<div class="modal-body" id="modalBodyGenerico"></div>`
-		+ 			`<div class="modal-footer">`
-		+ 				`<span id="modalFootGenerico"></span>`
-		+ 				`<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>`
-		+ 			`</div>`
-		+ 		`</div>`
-		+ 	`</div>`
-		+ `</div>`
+		+ (bootstrap == '4'
+			? ''
+				+ `<div class="modal" id="modalGenerico">`
+				+ 	`<div class="modal-dialog">`
+				+ 		`<div class="modal-content">`
+				+ 			`<div class="modal-header">`
+				+ 				`<h4 class="modal-title" id="modalHeadGenerico"></h4>`
+				+ 				`<button id="modalCloseGenerico" type="button" class="close" data-dismiss="modal">&times;</button>`
+				+ 			`</div>`
+				+ 			`<div class="modal-body" id="modalBodyGenerico"></div>`
+				+ 			`<div class="modal-footer">`
+				+ 				`<span id="modalFootGenerico"></span>`
+				+ 				`<button type="button" class="btn btn-light" data-dismiss="modal">Fechar</button>`
+				+ 			`</div>`
+				+ 		`</div>`
+				+ 	`</div>`
+				+ `</div>`
+			: ''
+				+ `<div class="modal fade" id="modalGenerico" role="dialog">`
+				+ 	`<div class="modal-dialog">`
+				+ 		`<div class="modal-content">`
+				+ 			`<div class="modal-header">`
+				+ 				`<button type="button" class="close" id="modalCloseGenerico" data-dismiss="modal">&times;</button>`
+				+ 				`<h4 class="modal-title" id="modalHeadGenerico"></h4>`
+				+ 			`</div>`
+				+ 			`<div class="modal-body" id="modalBodyGenerico"></div>`
+				+ 			`<div class="modal-footer">`
+				+ 				`<span id="modalFootGenerico"></span>`
+				+ 				`<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>`
+				+ 			`</div>`
+				+ 		`</div>`
+				+ 	`</div>`
+				+ `</div>`
+		)
 	);
 
 	if ((usuario_Global.FOTO_USUARIO || '') != '') {
@@ -653,6 +692,8 @@ function initComponet() {
 			data = JSON.parse(data);
 			console.log(data);
 
+			template_Global = data.template || 'adminLTE';
+
 			$(".titulo_projeto").html(''
 				+ ((data.logo_png || '') == '' ? '' : "<img src='../img/"+data.logo_png+".png' height='30px'> ")
 				+ ((data.logo_png || '') != '' ? '' : (data.nome_projeto || ''))
@@ -668,8 +709,9 @@ function initComponet() {
 				$(".titulo_projeto").parent().css('background-color', data['color-holder_sidebar']);
 			}
 
+			console.log('perfilPage: ',data.perfilPage);
 			if ((data.perfilPage || '') != '') {
-				$(".user-footer").find(".pull-left").find('a')
+				$("#btn-perfil")
 					.data('file', data.perfilPage.file)
 					.click(function() { abrirConteudo(this, data.perfilPage.desc); });
 			}
@@ -682,7 +724,7 @@ function initComponet() {
 			if ((data['color-teste_menu'] || '') != '')
 				$(".navbar-static-top").css('color', data['color-teste_menu'])
 
-			if ((data['color-nome_usuario'] || '') != '')
+			if ((data['color-nome_usuario'] || '') != '' && template_Global == 'adminLTE')
 				$(".nome_usuario").css('color', data['color-nome_usuario'])
 
 			loaderBg_Global = data['colorLoadAlert'] || '#11ACED';
@@ -696,6 +738,9 @@ function initComponet() {
 			dataMenu = JSON.parse(dataMenu);
 			console.log(dataMenu);
 			$(".sidebar-menu").html(resolveMenu(dataMenu.menu, (dataMenu.template || 'adminLTE')));
+			if ((dataMenu.template || '') == 'architectui') {
+				loadTemplate();
+			}
 		}
 	}
 

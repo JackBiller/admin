@@ -24,6 +24,10 @@
 
 	<!-- <link rel="stylesheet" href="../biblioteca/assets/css/base.min.css"> -->
 	<link rel="stylesheet" href="../biblioteca/assets/css/base.css">
+	<link rel="stylesheet" href="../biblioteca/bower_components/datatables.net/datatables.min.css">
+	<link rel="stylesheet" href="../biblioteca/bower_components/toast/jquery.toast.min.css">
+	<link rel="stylesheet" href="../biblioteca/bower_components/font-awesome/css/font-awesome.min.css">
+
 	<script>
 		var ext = (window.location.href.split('.')[1] || '').split('?')[0].split('#')[0];
 		if ((['html','php','htm']).indexOf(ext) != -1) {
@@ -114,7 +118,7 @@
 											<ul class="nav flex-column">
 												<li class="nav-item-btn text-center nav-item">
 													<!-- <button class="btn-wide btn btn-primary btn-sm"> -->
-													<button class="btn-pill btn-shadow btn-shine btn btn-focus">
+													<button class="btn-pill btn-shadow btn-shine btn btn-focus" id="btn-perfil">
 														Perfil
 													</button>
 													&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -186,39 +190,15 @@
 								<div class="page-title-subheading opacity-10">
 									<nav class="" aria-label="breadcrumb">
 										<ol class="breadcrumb">
-											<li class="breadcrumb-item">
-												<a>Principal</a>
-											</li>
-											<li class="breadcrumb-item">
-												<a>Checkout</a>
-											</li>
-											<li class="active breadcrumb-item" aria-current="page">
-												Configuração Geral
-											</li>
+											<li class="breadcrumb-item"><a>Principal</a></li>
 										</ol>
 									</nav>
 								</div>
 							</div>
 						</div>
 					</div>
-
 					<section class="content">
-						<div class="box" id="conteudo_pagina">
-							<div class="mb-3 card">
-								<div class="card-header-tab card-header">
-									<div class="card-header-title font-size-lg text-capitalize font-weight-normal">
-										<span class="box-title">Olá, <span id="nome_usuario">usuário</span>!</span>
-									</div>
-									<div class="btn-actions-pane-right text-capitalize">
-										<!-- <i class="fa fa-times"></i> -->
-									</div>
-								</div>
-								<div class="no-gutters row">
-									Essa é a tela principal do sistema
-								</div>
-								<!-- <div class="text-center d-block p-3 card-footer"></div> -->
-							</div>
-						</div>
+						<div class="box" id="conteudo_pagina"></div>
 					</section>
 				</div>
 
@@ -237,7 +217,6 @@
 						</div>
 					</div>
 				</div>
-
 			</div>
 		</div>
 	</div>
@@ -308,13 +287,22 @@
 	<script src="../biblioteca/assets/js/scripts-init/sweet-alerts.js"></script>
 	<script src="../biblioteca/assets/js/vendors/treeview.js"></script>
 	<script src="../biblioteca/assets/js/scripts-init/treeview.js"></script>
+	<script src="../biblioteca/bower_components/datatables.net/datatables.min.js"></script>
 	<script src="../biblioteca/assets/lib/dataTables/jquery.dataTables.min.js"></script>
 	<script src="../biblioteca/assets/lib/dataTables/dataTables.bootstrap4.min.js"></script>
-	<script src="../biblioteca/assets/lib/dataTables/dataTables.responsive.min.js"></script>
-	<script src="../biblioteca/assets/lib/dataTables/responsive.bootstrap.min.js"></script>
+	<!-- <script src="../biblioteca/assets/lib/dataTables/dataTables.responsive.min.js"></script> -->
+	<!-- <script src="../biblioteca/assets/lib/dataTables/responsive.bootstrap.min.js"></script> -->
 	<script src="../biblioteca/assets/js/vendors/tables.js"></script>
 	<script src="../biblioteca/assets/js/scripts-init/tables.js"></script>
 	<script src="../biblioteca/bower_components/platform/platform.js"></script>
+	<script src="../biblioteca/bower_components/jquery-browser-detection/jquery.browser.detection.min.js"></script>
+	<script src="../biblioteca/bower_components/toast/jquery.toast.min.js"></script>
+	<script src="../biblioteca/bower_components/jquery-mask/jquery.mask.min.js"></script>
+	<script src="../biblioteca/bower_components/jquery-maskmoney/dist/jquery.maskMoney.min.js"></script>
+	<script src="../biblioteca/bower_components/amcharts/core.js"></script>
+	<script src="../biblioteca/bower_components/amcharts/charts.js"></script>
+	<script src="../biblioteca/bower_components/amcharts/animated.js"></script>
+	<script src="../biblioteca/bower_components/amcharts/pt_BR.js"></script>
 
 <script>
 var usuario_Global = JSON.parse(localStorage.getItem('usuario'));
