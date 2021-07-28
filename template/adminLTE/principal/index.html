@@ -3,11 +3,11 @@
 
 <head>
 	<script>
-		setTimeout(function() { 
+		setTimeout(function() {
 			if (window.location.href.indexOf('http://') == 0) {
 				return window.location.assign(window.location.href.replace('http','https'));
 			}
-	
+
 			if (!localStorage.usuario) window.location.assign('../index.html');
 		}, 100);
 	</script>
@@ -28,8 +28,8 @@
 	<link rel="stylesheet" href="../biblioteca/bower_components/toast/jquery.toast.min.css">
 	<!-- END_LIB_HEAD -->
 	<link rel="stylesheet" href="../biblioteca/dist/css/AdminLTE.min.css">
-	<!-- <link rel="stylesheet" href="../biblioteca/dist/css/skins/_all-skins.min.css"> -->
-	<link rel="stylesheet" href="./_skin-custom.css">
+	<link rel="stylesheet" href="../biblioteca/dist/css/skins/_all-skins.min.css">
+	<!-- <link rel="stylesheet" href="./_skin-custom.css"> -->
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 	<script>
 		var ext = (window.location.href.split('.')[1] || '').split('?')[0].split('#')[0];
@@ -174,31 +174,31 @@
 	<script>
 		var usuario_Global = JSON.parse(localStorage.getItem('usuario'));
 
-		$(document).ready(function() { 
+		$(document).ready(function() {
 			// importLib("../js/resolvConfig.min.js");
 			importLib("../js/resolvConfig.full.js");
 			importLib("../script.js");
 			preInit();
 		});
 
-		function logoff() { 
+		function logoff() {
 			if (!confirm('Deseja sair da aplicação?')) return false;
 			localStorage.removeItem('usuario');
 			window.location.assign('index.html');
 		}
 
-		function updateUser() { 
+		function updateUser() {
 			ajax({
 				param: { 'updateUser': true },
-				done: function(data) { 
+				done: function(data) {
 					data = JSON.parse(data);
-					if (data.debug == 'OK') { 
+					if (data.debug == 'OK') {
 						usuario_Global = data;
 						localStorage.setItem('usuario', JSON.stringify(usuario_Global));
-					} else if (data.debug != 'NO_VALID') { 
+					} else if (data.debug != 'NO_VALID') {
 						alert(data.debug, { icon: 'info' });
 						localStorage.removeItem('usuario');
-						setTimeout(function() { 
+						setTimeout(function() {
 							window.location.assign('../');
 						}, 2000);
 					}
@@ -206,26 +206,26 @@
 			});
 		}
 
-		function preInit() { 
-			if ( 
-				window['objParamGrade_Global'] != undefined && 
+		function preInit() {
+			if (
+				window['objParamGrade_Global'] != undefined &&
 				window['ajax'] != undefined
-			) { 
+			) {
 				initComponet();
-			} else { 
+			} else {
 				setTimeout(function() { preInit(); }, 10);
 			}
 		}
 
-		function importLib(path) { 
+		function importLib(path) {
 			let ext = (path.split('.')).pop();
 			if (['js','css'].indexOf(ext.toLowerCase()) < 0) return false;
 
-			return new Promise(function (resolve, reject) { 
+			return new Promise(function (resolve, reject) {
 				let client = new XMLHttpRequest();
 				client.open("HEAD", path, true);
-				client.onreadystatechange = function() { 
-					if (this.readyState == 2) { 
+				client.onreadystatechange = function() {
+					if (this.readyState == 2) {
 						path += '?' + client.getResponseHeader("Last-Modified")
 						$('body').append(
 							ext.toLowerCase() == 'js'
