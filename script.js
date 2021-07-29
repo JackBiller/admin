@@ -15,7 +15,7 @@ var objParamGrade_Global = {
 	fontFamily: 'NomeDaFont',
 
 	// Config Table
-	classTable: 		'table table-bordered stripe table-hover table-condensed table-responsive backTeste', // table-striped
+	classTable: 		'table table-bordered stripe table-hover table-condensed backTeste', // table-striped table-responsive
 	titleTableBgColor: 	'#D5DEE3', 	// '#981818',
 	titleTableColor: 	'black',
 	titleTableWeight: 	'bold',		// 'bold',
@@ -439,7 +439,7 @@ function time2Int(time) {
 	return (horas * 3600) + (minuto * 60) + segundo;
 }
 
-function int2Time(value, rmDescimal=false) {
+function int2Time(value, rmDecimal=false) {
 	var horas = 0, minutos = 0, segundos = 0
 
 	if (value >= 3600) {
@@ -458,7 +458,7 @@ function int2Time(value, rmDescimal=false) {
 	if (isNaN(segundos)) segundos = '00';
 
 	var result = horas + ':' + minutos + ':' + segundos;
-	if (rmDescimal) result = result.split('.')[0];
+	if (rmDecimal) result = result.split('.')[0];
 	return result;
 }
 
@@ -709,7 +709,6 @@ function initComponet() {
 				$(".titulo_projeto").parent().css('background-color', data['color-holder_sidebar']);
 			}
 
-			console.log('perfilPage: ',data.perfilPage);
 			if ((data.perfilPage || '') != '') {
 				$("#btn-perfil")
 					.data('file', data.perfilPage.file)
@@ -789,7 +788,7 @@ function replaceUnicode(texto) {
 		,'u00FB','u00FC','u00FD','u00FE','u00FF'
 	];
 
-	for (var i=0; i < search.length; i++) { 
+	for (var i=0; i < search.length; i++) {
 		texto = texto.replace(new RegExp(search[i], 'gi'), replace[i]);
 	}
 	return texto;
