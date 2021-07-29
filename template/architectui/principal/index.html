@@ -3,11 +3,11 @@
 
 <head>
 	<script>
-		setTimeout(function() { 
+		setTimeout(function() {
 			if (window.location.href.indexOf('http://') == 0) {
 				return window.location.assign(window.location.href.replace('http','https'));
 			}
-	
+
 			if (!localStorage.usuario) window.location.assign('../index.html');
 		}, 100);
 	</script>
@@ -23,8 +23,10 @@
 	<meta name="msapplication-tap-highlight" content="no">
 
 	<!-- <link rel="stylesheet" href="../biblioteca/assets/css/base.min.css"> -->
+	<link rel="stylesheet" href="./style.css">
 	<link rel="stylesheet" href="../biblioteca/assets/css/base.css">
-	<link rel="stylesheet" href="../biblioteca/bower_components/datatables.net/datatables.min.css">
+	<!-- <link rel="stylesheet" href="../biblioteca/assets/lib/bootstrap-4.6.0-dist/css/bootstrap.min.css"> -->
+	<!-- <link rel="stylesheet" href="../biblioteca/bower_components/datatables.net/datatables.min.css"> -->
 	<link rel="stylesheet" href="../biblioteca/bower_components/toast/jquery.toast.min.css">
 	<link rel="stylesheet" href="../biblioteca/bower_components/font-awesome/css/font-awesome.min.css">
 
@@ -185,7 +187,9 @@
 				<div class="app-main__inner">
 					<div class="app-page-title" style="padding: 10px;padding-left:20px;">
 						<div class="page-title-wrapper">
-							<div class="page-title-heading">Principal</div>
+							<div class="page-title-heading">
+								<span class="titulo_pagina">Carregando...</span>
+							</div>
 							<div class="page-title-actions">
 								<div class="page-title-subheading opacity-10">
 									<nav class="" aria-label="breadcrumb">
@@ -207,7 +211,7 @@
 						<div class="app-footer__inner">
 							<div class="app-footer-left">
 								<div class="footer-dots">
-									<strong>Criado por <spam id="developerFoot">SevenPay Pagamentos Ltda</spam>.</strong> 
+									<strong>Criado por <spam id="developerFoot">SevenPay Pagamentos Ltda</spam>.</strong>
 									Todos os direitos reservados.
 								</div>
 							</div>
@@ -222,6 +226,7 @@
 	</div>
 
 	<script src="../biblioteca/assets/lib/jquery/jquery-3.3.1.min.js"></script>
+	<!-- <script src="../biblioteca/assets/lib/bootstrap-4.6.0-dist/js/bootstrap.min.js"></script> -->
 	<script src="../biblioteca/assets/lib/bootstrap-bundle/bootstrap.bundle.min.js"></script>
 	<script src="../biblioteca/assets/lib/metismenu/metismenu.min.js"></script>
 	<script src="../biblioteca/assets/js/scripts-init/app.js"></script>
@@ -287,7 +292,7 @@
 	<script src="../biblioteca/assets/js/scripts-init/sweet-alerts.js"></script>
 	<script src="../biblioteca/assets/js/vendors/treeview.js"></script>
 	<script src="../biblioteca/assets/js/scripts-init/treeview.js"></script>
-	<script src="../biblioteca/bower_components/datatables.net/datatables.min.js"></script>
+	<!-- <script src="../biblioteca/bower_components/datatables.net/datatables.min.js"></script> -->
 	<script src="../biblioteca/assets/lib/dataTables/jquery.dataTables.min.js"></script>
 	<script src="../biblioteca/assets/lib/dataTables/dataTables.bootstrap4.min.js"></script>
 	<!-- <script src="../biblioteca/assets/lib/dataTables/dataTables.responsive.min.js"></script> -->
@@ -303,6 +308,9 @@
 	<script src="../biblioteca/bower_components/amcharts/charts.js"></script>
 	<script src="../biblioteca/bower_components/amcharts/animated.js"></script>
 	<script src="../biblioteca/bower_components/amcharts/pt_BR.js"></script>
+
+
+    <script src="../assets/js/vendors/tables.js"></script>
 
 <script>
 var usuario_Global = JSON.parse(localStorage.getItem('usuario'));
