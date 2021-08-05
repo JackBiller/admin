@@ -2,8 +2,11 @@
 <html>
 <head>
 	<script>
-		if (window.location.href.indexOf('http://') == 0)
+		if (window.location.href.indexOf('localhost') < 0
+			&& window.location.href.indexOf('http://') == 0
+		) {
 			window.location.assign(window.location.href.replace('http','https'));
+		}
 	</script>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">

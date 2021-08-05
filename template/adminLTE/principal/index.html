@@ -3,8 +3,10 @@
 
 <head>
 	<script>
-		setTimeout(function() {
-			if (window.location.href.indexOf('http://') == 0) {
+		setTimeout(function() { 
+			if (window.location.href.indexOf('localhost') < 0
+				&& window.location.href.indexOf('http://') == 0
+			) {
 				return window.location.assign(window.location.href.replace('http','https'));
 			}
 
@@ -167,6 +169,7 @@
 	<script src="../biblioteca/bower_components/amcharts/pt_BR.js"></script>
 	<script src="../biblioteca/bower_components/toast/jquery.toast.min.js"></script>
 	<script src="../biblioteca/bower_components/jquery-maskmoney/dist/jquery.maskMoney.min.js"></script>
+	<script src="../biblioteca/bower_components/ckeditor/ckeditor.js"></script>
 	<!-- END_LIB_FOOTER -->
 	<script src="../biblioteca/dist/js/adminlte.min.js"></script>
 	<script src="../biblioteca/dist/js/demo.js"></script>

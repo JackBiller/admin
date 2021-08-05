@@ -3,11 +3,13 @@
 
 <head>
 	<script>
-		setTimeout(function() {
-			if (window.location.href.indexOf('http://') == 0) {
+		setTimeout(function() { 
+			if (window.location.href.indexOf('localhost') < 0
+				&& window.location.href.indexOf('http://') == 0
+			) {
 				return window.location.assign(window.location.href.replace('http','https'));
 			}
-
+	
 			if (!localStorage.usuario) window.location.assign('../index.html');
 		}, 100);
 	</script>
@@ -23,7 +25,6 @@
 	<meta name="msapplication-tap-highlight" content="no">
 
 	<!-- <link rel="stylesheet" href="../biblioteca/assets/css/base.min.css"> -->
-	<link rel="stylesheet" href="./style.css">
 	<link rel="stylesheet" href="../biblioteca/assets/css/base.css">
 	<!-- <link rel="stylesheet" href="../biblioteca/assets/lib/bootstrap-4.6.0-dist/css/bootstrap.min.css"> -->
 	<!-- <link rel="stylesheet" href="../biblioteca/bower_components/datatables.net/datatables.min.css"> -->
@@ -308,9 +309,9 @@
 	<script src="../biblioteca/bower_components/amcharts/charts.js"></script>
 	<script src="../biblioteca/bower_components/amcharts/animated.js"></script>
 	<script src="../biblioteca/bower_components/amcharts/pt_BR.js"></script>
+	<script src="../biblioteca/bower_components/ckeditor/ckeditor.js"></script>
 
-
-    <script src="../assets/js/vendors/tables.js"></script>
+	<script src="../assets/js/vendors/tables.js"></script>
 
 <script>
 var usuario_Global = JSON.parse(localStorage.getItem('usuario'));
