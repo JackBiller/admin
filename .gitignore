@@ -28,3 +28,10 @@ composer.json
 /vendor/
 
 /dist
+
+./index.html
+./login/*
+./create-user/*
+./password-change/*
+./password-reset/*
+./principal/*
