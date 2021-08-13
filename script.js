@@ -727,6 +727,31 @@ function initComponet() {
 				$(".nome_usuario").css('color', data['color-nome_usuario'])
 
 			loaderBg_Global = data['colorLoadAlert'] || '#11ACED';
+
+			if (template_Global == 'architectui') {
+				$("body").append(''
+					+ 	'<style>'
+					+ 	'.app-header__logo .logo-src {'
+					+ 		'background: url("../img/' + data.logo_png + '.png") !important;'
+					+ 	'}'
+					+ 	'.app-header.header-text-dark .app-header__logo .logo-src {'
+					+ 		'background: url("../img/' + data.logo_png + '.png") !important;'
+					+ 	'}'
+					+ 	'.app-logo {'
+					+ 		'background: url("../img/' + data.logo_png + '.png") !important;'
+					+ 	'}'
+					+ 	'.app-header.header-text-light .app-header__logo .logo-src {'
+					+ 		'background: url("../img/' + data.logo_png + '.png") !important;'
+					+ 	'}'
+					+ 	'.app-sidebar.sidebar-text-light .app-header__logo .logo-src {'
+					+ 		'background: url("../img/' + data.logo_png + '.png") !important;'
+					+ 	'}'
+					+ 	'.app-logo-inverse {'
+					+ 		'background: url("../img/' + data.logo_png + '.png") !important;'
+					+ 	'}'
+					+ 	'</style>'
+				);
+			}
 		}
 	}
 
