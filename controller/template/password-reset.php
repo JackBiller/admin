@@ -14,7 +14,7 @@ return '<center>
 		<div style="margin-top:20px;max-width:600px">
 			<div style="font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%">
 				<div style="font-family:Nunito Sans,Arial;font-size:16px;line-height:22px;text-align:left;color:#43425d">
-					Recebemos a solicitação de alteração de senha do seu perfil
+					Recebemos a solicitação de alteração de senha do seu perfil&nbsp;
 					<span style="font-weight:600">NOME_USUARIO (<a href="mailto:EMAIL_USUARIO" target="_blank">EMAIL_USUARIO</a>)</span>.
 				</div>
 
@@ -51,15 +51,15 @@ return '<center>
 				</table>
 
 				<div style="margin-top:40px;font-family:Nunito Sans,Arial;font-size:16px;line-height:22px;text-align:left;color:#43425d">
-					Caso você não tenha solicitado a alteração de senha, entre em contato conosco através do e-mail
+					Caso você não tenha solicitado a alteração de senha, entre em contato conosco através do e-mail&nbsp;
 					<a href="mailto:EMAIL_CONTATO_EMPRESA" target="_blank">EMAIL_CONTATO_EMPRESA</a>.
 				</div>
 			</div>
 		</div>
 		<div style="margin:40px auto;max-width:600px">
 			<div style="font-family:Nunito Sans,Arial;font-size:14px;line-height:19px;text-align:left;color:#616b79">
-				Este e-mail é enviado automaticamente.
-				Precisa de ajuda? Fale com a gente também através do
+				Este e-mail é enviado automaticamente.&nbsp;
+				Precisa de ajuda? Fale com a gente também através do&nbsp;
 				<a href="SITE_LINK_EMPRESA" rel="noopener noreferrer" target="_blank" data-saferedirecturl="SITE_LINK_EMPRESA">
 					SITE_EMPRESA
 				</a>
