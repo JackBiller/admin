@@ -570,8 +570,9 @@ function abrirConteudo(el, titulo) {
 		+ "<img src='../img/carrega.gif'>"
 	);
 
-	if (["SuSE","Android","iOS","Windows Phone"].indexOf(platform.os.family) >= 0 &&
-		$("body").attr('class').indexOf('sidebar-open') >= 0
+	if (["SuSE","Android","iOS","Windows Phone"].indexOf(platform.os.family) >= 0
+		&& ($("body").attr('class') || '') != ''
+		&& $("body").attr('class').indexOf('sidebar-open') >= 0
 	) {
 		$(".sidebar-toggle")[0].click();
 	}
