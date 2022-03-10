@@ -104,7 +104,7 @@ if (!empty($_POST['loginSystem']) && !empty($_POST['login']) && !empty($_POST['s
 	$paramAddAws = "
 				, 0 AS CK_USE_AWS";
 	$configEnv = json_decode(CONFIG_ENV);
-	if (isset($configEnv->aws) && isset($configEnv->aws->usePerfilFoto) 
+	if (isset($configEnv->aws) && isset($configEnv->aws->usePerfilFoto)
 		&& $configEnv->aws->usePerfilFoto == true
 	) {
 		$region = $configEnv->aws->region;
@@ -198,7 +198,7 @@ if (!empty($_POST['passwordReset'])) {
 
 	$mail = new Email();
 	$mail->host 		= $configEnv->password_reset__host;
-	$mail->username 	= isset($configEnv->password_reset__user) 
+	$mail->username 	= isset($configEnv->password_reset__user)
 						? $configEnv->password_reset__user
 						: $configEnv->password_reset__email;
 	$mail->emailFrom 	= $configEnv->password_reset__email;
