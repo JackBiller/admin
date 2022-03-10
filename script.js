@@ -702,6 +702,61 @@ function initComponet() {
 
 			template_Global = data.template || 'adminLTE';
 
+			if ((data.firebaseConfig || '') != '') {
+				$("body").append(`
+					<script>
+						var firebaseConfig = ${JSON.stringify(data.firebaseConfig)};
+						firebase.initializeApp(firebaseConfig);
+						const messaging = firebase.messaging();
+
+						function IntitalizeFireBaseMessaging() {
+							messaging
+								.requestPermission()
+								.then(function() {
+									// console.log("Notification Permission");
+									return messaging.getToken();
+								})
+								.then(function(token) {
+									// console.log("Token : " + token);
+									registrarFCM_Token(token);
+								})
+								.catch(function(reason) {
+									console.log(reason);
+								});
+						}
+
+						messaging.onMessage(function(payload) {
+							// console.log(payload);
+							const notificationOption = {
+								body:payload.notification.body,
+								icon:payload.notification.icon
+							};
+
+							if (Notification.permission === "granted") {
+								var notification=new Notification(payload.notification.title,notificationOption);
+
+								notification.onclick=function(ev) {
+									ev.preventDefault();
+									window.open(payload.notification.click_action,'_blank');
+									notification.close();
+								}
+							}
+
+						});
+						messaging.onTokenRefresh(function() {
+							messaging.getToken()
+								.then(function(newtoken) {
+									// console.log("New Token : "+ newtoken);
+								})
+								.catch(function(reason) {
+									console.log(reason);
+								})
+						})
+						IntitalizeFireBaseMessaging();
+					</script>`
+				);
+			}
+
 			$(".titulo_projeto").html(''
 				+ ((data.logo_png || '') == '' ? '' : "<img src='../img/"+data.logo_png+".png' height='30px'> ")
 				+ ((data.logo_png || '') != '' ? '' : (data.nome_projeto || ''))
@@ -799,6 +854,20 @@ function initComponet() {
 		ajax(configPrincipal);
 		ajax(menu);
 	}
+}
+
+function registrarFCM_Token(token) {
+	ajax({
+		param: { 'registrarFCM_Token': true, token },
+		done: function(data) {
+			if (data != 1) {
+				// alert('Falha ao registrar Token: ' + data, { icon: 'error' });
+				console.error('Falha ao registrar Token: ' + data);
+			} else {
+				// alert('Token registrado com sucesso', { icon: 'success' });
+			}
+		}
+	})
 }
 
 function mensagemSave(data, msmSuccess, callBack, callBackSuccess=function(){}) {

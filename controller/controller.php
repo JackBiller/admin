@@ -56,8 +56,13 @@ if (!empty($_POST['getConfigPrincipal'])) {
 	if (isset($config->colorLoadAlert))
 		$config->principal->colorLoadAlert = $config->colorLoadAlert;
 
-	$config->principal->template = isset($config->template) 
+	$config->principal->template = isset($config->template)
 		? $config->template : 'adminLTE';
+
+	$configEnv = json_decode(CONFIG_ENV);
+	if (isset($configEnv->firebaseConfig)) {
+		$config->principal->firebaseConfig = $configEnv->firebaseConfig;
+	}
 	echo json_encode($config->principal);
 }
 
@@ -81,8 +86,8 @@ if (!empty($_POST['getMenu'])) {
 		if (
 			!isset($usuario_Global) || (
 				isset($usuario_Global) && (
-					$usuario_Global->get('CK_ADMIN') == 1 || 
-					empty($itemMenuParent->admin) || 
+					$usuario_Global->get('CK_ADMIN') == 1 ||
+					empty($itemMenuParent->admin) ||
 					$itemMenuParent->admin == false
 				)
 			)
@@ -98,9 +103,9 @@ if (!empty($_POST['getMenu'])) {
 			} else {
 				// Seta item menu descrição e arquivo caso tenha
 				$itemMenuParentAcesso->set($itemMenuParent->desc, 'desc');
-				if (!empty($itemMenuParent->file)) 
+				if (!empty($itemMenuParent->file))
 					$itemMenuParentAcesso->set($itemMenuParent->file, 'file');
-				if (!empty($itemMenuParent->icon)) 
+				if (!empty($itemMenuParent->icon))
 					$itemMenuParentAcesso->set($itemMenuParent->icon, 'icon');
 
 				// Verfica se tem itens de menu
@@ -114,7 +119,7 @@ if (!empty($_POST['getMenu'])) {
 						if (
 							!isset($usuario_Global) || (
 								isset($usuario_Global) && (
-									$usuario_Global->get('CK_ADMIN') == 1 || 
+									$usuario_Global->get('CK_ADMIN') == 1 ||
 									empty($itemMenu->admin) || $itemMenu->admin == false
 								)
 							)
@@ -263,6 +268,28 @@ if (!empty($_POST['doneSendBase64'])) {
 	}
 }
 /* End: Enviar arquivo via base64 */
+if (!empty($_POST['registrarFCM_Token'])) {
+	$token = $_POST['token'];
+	$sql = "SELECT 	ID_TOKEN_PUSH_NOTIFICATION
+			FROM 	TOKEN_PUSH_NOTIFICATION
+			WHERE 	TOKEN = '$token'
+			AND 	CK_INATIVO = 0";
+	$resultado = padraoResultado($pdo, $sql);
+	$resultado = $resultado[0];
+
+	if ($resultado->get('debug') != 'OK') {
+		$sql = "INSERT INTO TOKEN_PUSH_NOTIFICATION
+					(TOKEN, ID_USUARIO)
+				VALUES
+					('$token', $id_usuario)";
+		echo padraoExecute($pdo, $sql);
+	} else {
+		$sql = "UPDATE 	TOKEN_PUSH_NOTIFICATION
+				SET 	ID_USUARIO = $id_usuario
+				WHERE 	ID_TOKEN_PUSH_NOTIFICATION = " . $resultado->get('ID_TOKEN_PUSH_NOTIFICATION');
+		echo padraoExecute($pdo, $sql);
+	}
+}
 
 
 function log_banco($nomeDaTabela, $identificador, $modificacoes, $tipo, $pdo, $id_usuario) {
@@ -280,7 +307,7 @@ function log_banco($nomeDaTabela, $identificador, $modificacoes, $tipo, $pdo, $i
 	// $log->set(date('Y-m-d H:i:s'),	'data'		 );
 
 	$sql = "SELECT id_$nomeDaTabela, COALESCE(logs, '') AS logs
-			FROM $nomeDaTabela 
+			FROM $nomeDaTabela
 			WHERE id_$nomeDaTabela = $identificador";
 	$recebe = padraoResultado($pdo, $sql);
 	$recebe = $recebe[0];
@@ -293,7 +320,7 @@ function log_banco($nomeDaTabela, $identificador, $modificacoes, $tipo, $pdo, $i
 		'data'=> date('Y-m-d H:i:s'),
 		'tipo'=> $tipo,
 		'descricao'=> $modificacoes,
-		'id_usuario'=> $id_usuario 
+		'id_usuario'=> $id_usuario
 	);
 
 	if ($recebe->get('logs') == '') array_push($logs, $log);
@@ -317,7 +344,7 @@ function returnUser($pdo, $hash, $inativo='') {
 					-- 	WHERE COMANDO.CK_INATIVO = 0
 					-- 	AND USUARIO_COMANDO.ID_USUARIO = USUARIO.ID_USUARIO
 					-- ),'') AS COMANDO
-			FROM USUARIO 
+			FROM USUARIO
 			INNER JOIN USUARIO_HASH ON USUARIO_HASH.ID_USUARIO = USUARIO.ID_USUARIO
 				AND USUARIO_HASH.CK_INATIVO = 0
 			WHERE USUARIO_HASH.HASH = '$hash'
