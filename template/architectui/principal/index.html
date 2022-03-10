@@ -3,13 +3,13 @@
 
 <head>
 	<script>
-		setTimeout(function() { 
+		setTimeout(function() {
 			if (window.location.href.indexOf('localhost') < 0
 				&& window.location.href.indexOf('http://') == 0
 			) {
 				return window.location.assign(window.location.href.replace('http','https'));
 			}
-	
+
 			if (!localStorage.usuario) window.location.assign('../index.html');
 		}, 100);
 	</script>
@@ -27,10 +27,12 @@
 
 	<!-- <link rel="stylesheet" href="../biblioteca/assets/css/base.min.css"> -->
 	<link rel="stylesheet" href="../biblioteca/assets/css/base.css">
+	<!-- START_LIB_HEAD -->
 	<!-- <link rel="stylesheet" href="../biblioteca/assets/lib/bootstrap-4.6.0-dist/css/bootstrap.min.css"> -->
 	<!-- <link rel="stylesheet" href="../biblioteca/bower_components/datatables.net/datatables.min.css"> -->
 	<link rel="stylesheet" href="../biblioteca/bower_components/toast/jquery.toast.min.css">
 	<link rel="stylesheet" href="../biblioteca/bower_components/font-awesome/css/font-awesome.min.css">
+	<!-- END_LIB_HEAD -->
 
 	<script>
 		var ext = (window.location.href.split('.')[1] || '').split('?')[0].split('#')[0];
@@ -227,6 +229,7 @@
 		</div>
 	</div>
 
+	<!-- START_LIB_FOOTER -->
 	<script src="../biblioteca/assets/lib/jquery/jquery-3.3.1.min.js"></script>
 	<!-- <script src="../biblioteca/assets/lib/bootstrap-4.6.0-dist/js/bootstrap.min.js"></script> -->
 	<script src="../biblioteca/assets/lib/bootstrap-bundle/bootstrap.bundle.min.js"></script>
@@ -312,6 +315,9 @@
 	<script src="../biblioteca/bower_components/amcharts/pt_BR.js"></script>
 	<script src="../biblioteca/bower_components/ckeditor/ckeditor.js"></script>
 
+	<script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-messaging.js"></script>
+	<!-- END_LIB_FOOTER -->
 	<script src="../assets/js/vendors/tables.js"></script>
 
 <script>
