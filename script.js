@@ -723,7 +723,14 @@ function initComponet() {
 					.click(function() { abrirConteudo(this, data.perfilPage.desc); });
 			}
 
-			if (((data.foot || {}).developer || '') != '') $("#developerFoot").html(data.foot.developer);
+			if (((data.foot || {}).developer || '') != '') {
+				$("#developerFoot").html(
+					((data.foot || {}).developerSite || '') != ''
+					? `<a target="_blank" href="${data.foot.developerSite}">${data.foot.developer}</a>`
+					: data.foot.developer
+				);
+			}
+
 			if ((data.version || '') != '') $("#verionFoot").html(data.version);
 
 			$("body").attr("class", $("body").attr("class") + " skin-" + (data['color-app'] || 'blue'))
