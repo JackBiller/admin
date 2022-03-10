@@ -189,7 +189,14 @@ function ajax(option) {
 function ajaxExecute(option) {
 	processAjax_Global = true;
 
-	if (typeof(option.erro) == 'function') {
+
+	if ((option.erro || '') == '' && (option.error || '') != '') {
+		if (typeof(option.error) == 'function') {
+			var erro = option.error
+		} else {
+			eval(option.error);
+		}
+	} else if (typeof(option.erro) == 'function') {
 		var erro = option.erro
 	} else {
 		eval(option.erro);
