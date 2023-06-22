@@ -170,11 +170,19 @@ function padraoResultado($pdo, $sql, $msm='Nenhum resultado encontrado!') {
 		if (empty(\$row)) 	array_push(\$arrayResultado, new FalseDebug(\$msm));
 		else 			do 	array_push(\$arrayResultado, new Generico(\$row, true)); while(\$row = ibase_fetch_object(\$resultado));");
 	} else {
-		$verifica = $pdo->query($sql);
-		foreach ($verifica as $dados) {
-			array_push($arrayResultado, new Generico($dados));
+		try {
+			$verifica = $pdo->query($sql);
+			foreach ($verifica as $dados) {
+				array_push($arrayResultado, new Generico($dados));
+			}
+			if (sizeof($arrayResultado) == 0) array_push($arrayResultado, new FalseDebug($msm));
+		} catch(PDOException $e) {
+			echo 'Error: ',  $e->getMessage(), "\n";
+			echo "\n\n\n";
+			echo printQuery($sql);
+			echo "\n\n\n";
+			exit('It went out system');
 		}
-		if (sizeof($arrayResultado) == 0) array_push($arrayResultado, new FalseDebug($msm));
 	}
 	return $arrayResultado;
 }
@@ -186,23 +194,31 @@ function padraoExecute($pdo, $sql, $table='') {
 		eval("
 		\$resultado = ibase_query(\$pdo, \$sql);
 		COMMIT_WORK(\$pdo);
-		if (\$table) { 
+		if (\$table) {
 			\$resultado = ibase_fetch_row(\$resultado);
 			\$resultado = \$resultado['0'];
 		};");
 	} else {
-		$stmt = $pdo->prepare($sql);
-		$resultado = $stmt->execute();
-		if ($table != '' && $resultado == 1) {
-			// $resultado = "SELECT ID_$table FROM $table ORDER BY ID_$table DESC LIMIT 1";
-			if ($pdo->getAttribute(PDO::ATTR_DRIVER_NAME) == 'sqlsrv') {
-				// $resultado = "SELECT SCOPE_IDENTITY() AS ID";
-				$resultado = "SELECT @@IDENTITY AS ID";
-			} else {
-				$resultado = "SELECT LAST_INSERT_ID();";
+		try {
+			$stmt = $pdo->prepare($sql);
+			$resultado = $stmt->execute();
+			if ($table != '' && $resultado == 1) {
+				// $resultado = "SELECT ID_$table FROM $table ORDER BY ID_$table DESC LIMIT 1";
+				if ($pdo->getAttribute(PDO::ATTR_DRIVER_NAME) == 'sqlsrv') {
+					// $resultado = "SELECT SCOPE_IDENTITY() AS ID";
+					$resultado = "SELECT @@IDENTITY AS ID";
+				} else {
+					$resultado = "SELECT LAST_INSERT_ID();";
+				}
+				$verifica = $pdo->query($resultado);
+				foreach ($verifica as $dados) $resultado = $dados[0];
 			}
-			$verifica = $pdo->query($resultado);
-			foreach ($verifica as $dados) $resultado = $dados[0];
+		} catch (PDOException $e) {
+			echo 'Error: ',  $e->getMessage(), "\n";
+			echo "\n\n\n";
+			echo printQuery($sql);
+			echo "\n\n\n";
+			exit('It went out system');
 		}
 	}
 	return $resultado;
@@ -254,9 +270,9 @@ function printQuery($sql, $isHtml=false, $boolComentario=false) {
 
 	// formata para HTML
 	if ($isHtml) {
-		$sql = 
+		$sql =
 			str_replace("    ", '&nbsp;&nbsp;&nbsp;&nbsp;',
-			str_replace("\n", "<br>", 
+			str_replace("\n", "<br>",
 				$sql));
 	}
 	echo $sql;
@@ -309,7 +325,7 @@ function letraMaiuscula($letra) {
 	return $letra;
 }
 
-function formatarNomeHeadTable($nome) { 
+function formatarNomeHeadTable($nome) {
 	$nome = str_replace("-", "_-_", $nome);
 	$nomeVetor = explode("_",$nome);
 	for ($i=0; $i < (count($nomeVetor) - 1); $i++) {
@@ -347,7 +363,7 @@ function formatarNomeCampo($nomeCampo, $qtdTirarUltimo) {
 function juntaTodosMenosPrimeiro($array) {
 	$resultado = "";
 	$cont = 0;
-	for ($i = 1; $i < sizeof($array); $i++) { 
+	for ($i = 1; $i < sizeof($array); $i++) {
 		$resultado .= $cont == 0 ? $array[$i] : " ".$array[$i];
 		$cont++;
 	}
@@ -356,7 +372,7 @@ function juntaTodosMenosPrimeiro($array) {
 
 function retornaUltimaPosicao($array) {
 	$resultado = "";
-	for ($i=sizeof($array)-1; $i >= 0; $i--) { 
+	for ($i=sizeof($array)-1; $i >= 0; $i--) {
 		$resultado = $array[$i];
 		$i = -1;
 	}
@@ -373,6 +389,55 @@ function corretor($palavra) {
 	include $preDirectory."/dicionario.php";
 
 	return $palavra;
+}
+
+/**********************************************************************************************/
+/* FUNÇÕES QUERYS PRE-DEFINIDAS */
+/**********************************************************************************************/
+function queryInsertUpdate($table, $campos, $id='', $idCampo='') {
+	$idCampo = $idCampo == '' ? 'ID_' . $table : $idCampo;
+	$camposSql = '';
+	$valuesSql = '';
+	$updateSql = '';
+	$virgula = '
+					, ';
+
+	foreach ($campos as $key => $value) {
+		$camposSql .= ($camposSql == '' ? '' : $virgula) . $key;
+		$valuesSql .= ($valuesSql == '' ? '' : $virgula) . $value;
+		$updateSql .= ($updateSql == '' ? '' : $virgula) . $key . ' = ' . $value;
+	}
+
+	if ($idCampo == '' || $id == '') {
+		$sql = "INSERT INTO $table (
+					$camposSql
+				) VALUES (
+					$valuesSql
+				)";
+	} else {
+		$sql = "UPDATE 	$table
+				SET 	$updateSql
+				WHERE 	$idCampo = $id";
+	}
+
+	return $sql;
+}
+
+function padraoExecuteQuery($pdo, $table, $campos, $id='', $idCampo='') {
+	$idCampo = $idCampo == '' ? 'ID_' . $table : $idCampo;
+	$sql = queryInsertUpdate($table, $campos, $id, $idCampo);
+	if ($id == '') {
+		$resultado = padraoExecute($pdo, $sql, true);
+	} else {
+		$test = padraoExecute($pdo, $sql);
+		$resultado = $test == 1 ? $id : $test;
+	}
+	return $resultado;
+}
+
+function nullFromPost($param, $is_text=false, $is_null=true) {
+	$aspas = $is_text ? "'" : "";
+	return !empty($_POST[$param]) ? $aspas . $_POST[$param] . $aspas : ($is_null ? 'NULL' : '');
 }
 
 /**********************************************************************************************/
@@ -411,7 +476,7 @@ function enviarEmail($email) {
 		// Define os dados do servidor e tipo de conexão
 		if ($email->debug) $mail->SMTPDebug = 1; 						// Habilita o debug na hora de enviar o email
 		$mail->IsSMTP(); 												// Define que a mensagem será SMTP
-		$mail->SMTPAuth 	= true; 									// Usa autenticação SMTP? 
+		$mail->SMTPAuth 	= true; 									// Usa autenticação SMTP?
 																		// (obrigatório para alguns servidores, como o gmail)
 		$mail->Port 		= $email->isGmail ? 465 : 587;
 		$mail->Host 		= $email->host;
@@ -435,6 +500,44 @@ function enviarEmail($email) {
 	} catch (Exception $e) {
 		return '0';
 	}
+}
+
+function getSocialNetworkToEmail($networks) {
+	$body = '';
+	if (sizeof($networks) > 0) {
+		$body .= '
+			<p style="font-size:14px;text-align:center">
+				Siga nas nossas redes sociais
+			</p>
+		';
+	}
+	$body .= '
+		<table>
+			<tbody>
+				<tr>
+	';
+	foreach ($networks as $key => $value) {
+		$link = '';
+		switch ($key) {
+			case 'instagram': $link = "https://www.instagram.com/$value"; break;
+			case 'facebook': $link = "https://www.facebook.com/$value"; break;
+		}
+		$body .= '
+					<td>
+						<a href="' . $link . '" rel="noopener noreferrer" target="_blank">
+							<img style="display:block; width:42px;height:42px;"
+								src="cid:' . $key . '"
+							/>
+						</a>
+					</td>
+		';
+	}
+	$body .= '
+				</tr>
+			</tbody>
+		</table>
+	';
+	return $body;
 }
 
 /**********************************************************************************************/
@@ -641,7 +744,7 @@ function objectEmJson($objeto) {
 	$stringArray = "";
 	$preStringArray = "";
 	foreach ($arrayObjeto as $key => $value) {
-		if ($verifica) { 
+		if ($verifica) {
 			if ($primeiro) 	$preStringArray = "{\"".$value."\":";
 			else 			$preStringArray = ",\"".$value."\":";
 			$verifica = false;
@@ -655,7 +758,7 @@ function objectEmJson($objeto) {
 					break;
 				case 'double':
 					$stringArray .= $preStringArray.$value;
-					break; 
+					break;
 				case 'floute':
 					$stringArray .= $preStringArray.$value;
 					break;
@@ -669,7 +772,7 @@ function objectEmJson($objeto) {
 					$stringArray .= $preStringArray.arrayEmJson($value);
 					break;
 				case 'NULL':
-					// $stringArray .= $preStringArray.arrayEmJson($value); 
+					// $stringArray .= $preStringArray.arrayEmJson($value);
 					break;
 				default:
 					$stringArray .= $preStringArray."\"".$value."\"";
@@ -702,7 +805,7 @@ function arrayEmJson($array) {
 			case 'double':
 				if ($primeiro) 	$stringArray .= $value;
 				else 			$stringArray .= ",".$value;
-				break; 
+				break;
 			case 'float':
 				if ($primeiro)	$stringArray .= $value;
 				else 			$stringArray .= ",".$value;
@@ -752,7 +855,7 @@ function returnPixel($service, $id_pixel, $event, $options=array()) {
 				. "\nfbq('track', '$event'"
 				. (!isset($options['paramsEvent']) ? '' : ''
 					. ", "
-					. (gettype($options['paramsEvent']) == 'string' 
+					. (gettype($options['paramsEvent']) == 'string'
 						? $options['paramsEvent'] : json_encode($options['paramsEvent'])
 					)
 				)
@@ -867,7 +970,7 @@ function sanitizeString($str) {
 	$str = preg_replace('/[ýÿ]/ui', 'y', $str);
 	// $str = preg_replace('/[,(),;:|!"#$%&/=?~^><ªº-]/', '_', $str);
 	$str = preg_replace('/[^a-z0-9]/i', ' ', $str);
-	$str = preg_replace('/_+/', ' ', $str); 
+	$str = preg_replace('/_+/', ' ', $str);
 	return $str;
 }
 
@@ -1175,7 +1278,7 @@ function descriptografar($codigo, $chave) {
 }
 
 function subNumCrip($num) {
-	switch ($num) { 
+	switch ($num) {
 		case 0: $num = 21; break;
 		case 1: $num = 42; break;
 		case 2: $num = 59; break;
@@ -1191,7 +1294,7 @@ function subNumCrip($num) {
 }
 
 function subNumDesCrip($num) {
-	switch ($num) { 
+	switch ($num) {
 		case 21: $num = 0; break;
 		case 42: $num = 1; break;
 		case 59: $num = 2; break;
@@ -1208,7 +1311,7 @@ function subNumDesCrip($num) {
 
 function parseHex($num) {
 	$hex = ""; $hexVez = "";
-	while ($num >= 16) { 
+	while ($num >= 16) {
 		$hexVez = ($num % 16);
 		$num = (int) ($num / 16);
 		$hex .= validaAcimaDez($hexVez);

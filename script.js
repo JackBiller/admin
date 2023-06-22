@@ -182,6 +182,10 @@ function resolveMenu(menu, template='adminLTE') {
 }
 
 var processAjax_Global = false;
+function getUrl(option={}) {
+	return (option.url || (window['caminhoRequisicao'] || '../') + 'controller/controller.php');
+}
+
 function ajax(option) {
 	registerAjaxFunc(function() { ajaxExecute(option) });
 }
@@ -203,7 +207,7 @@ function ajaxExecute(option) {
 	}
 
 	$.ajax({
-		  url: 		(option.url 		|| (window['caminhoRequisicao'] || '../') + 'controller/controller.php')
+		  url: 		getUrl(option)
 		, type: 	(option.type 		|| 'POST')
 		, dataType: (option.dataType 	|| 'text')
 		, data: 	$.extend({}, usuario_Global, (option.param || {}))
@@ -776,6 +780,8 @@ function initComponet() {
 				$("#btn-perfil")
 					.data('file', data.perfilPage.file)
 					.click(function() { abrirConteudo(this, data.perfilPage.desc); });
+			} else {
+				$("#btn-perfil").css('display', 'none');
 			}
 
 			if (((data.foot || {}).developer || '') != '') {
@@ -880,6 +886,40 @@ function mensagemSave(data, msmSuccess, callBack, callBackSuccess=function(){}) 
 	callBack();
 }
 
+function defaultError(msm='Sem resposta do servidor', func=function(){}) {
+	mensagemSave(msm, '', func);
+}
+
+function disabledLoadButton(obj, disabled=true) {
+	if (disabled) {
+		var icon = '';
+		try {
+			icon = $(obj).find('i')[0].className.split('fa-')[1];
+		} catch(err) {}
+
+		var text = $(obj).html().split('</i>');
+		text = text[text.length-1];
+
+		$(obj)
+			.data('iconDefault', icon)
+			.data('textDefault', text);
+
+		$(obj)
+			.html('<i class="fa fa-spinner fa-spin"></i>' + text)
+			.attr('disabled', disabled);
+	} else {
+		var icon = $(obj).data('iconDefault');
+		var text = $(obj).data('textDefault');
+
+		$(obj)
+			.html(''
+				+ (icon == '' ? '' : '<i class="fa fa-' + icon + '"></i>')
+				+ (text)
+			)
+			.attr('disabled', disabled);
+	}
+}
+
 function replaceUnicode(texto) {
 	var replace = " ¡¢£¤¥¦§¨©ª«¬®¯°±²³´µ¶·¸¹º»¼½¾¿"
 		+ "ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ";
@@ -901,4 +941,16 @@ function replaceUnicode(texto) {
 		texto = texto.replace(new RegExp(search[i], 'gi'), replace[i]);
 	}
 	return texto;
+}
+
+function printReport(nome, options={}) {
+	window.open('../controller/printRelatorio.php'
+			+ '?nome=' + nome
+			+ '&HASH=' + (usuario_Global.HASH || '')
+			+ Object.keys(options).map(function(key) {
+				return '&' + key + '=' + options[key]
+			}).join('')
+		, '_blank'
+		, 'location=yes,height=750,width=900,scrollbars=yes,status=yes'
+	);
 }

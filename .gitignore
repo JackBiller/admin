@@ -17,6 +17,7 @@ composer.json
 /controller/constConfigAdd.php
 
 /controller/config/
+/controller/report/
 /controller/ClassSQL/
 /script/
 /img/

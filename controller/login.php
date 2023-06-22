@@ -122,7 +122,10 @@ if (!empty($_POST['loginSystem']) && !empty($_POST['login']) && !empty($_POST['s
 				$paramAddAws
 				, '$hashIdtentificacao' AS HASH
 			FROM 	USUARIO
-			WHERE 	USUARIO.EMAIL 		= '$login'
+			WHERE 	(
+					USUARIO.LOGIN 		= '$login'
+				OR 	USUARIO.EMAIL 		= '$login'
+			)
 			AND 	USUARIO.SENHA 		= '$senha'
 			AND 	USUARIO.CK_INATIVO 	= 0";
 	// printQuery(getQuery($pdo, $sql));

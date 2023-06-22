@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="42.117001"
+   height="42.117001"
+   viewBox="0 0 11.143456 11.143457"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1.2 (b8e25be833, 2022-02-05)"
+   sodipodi:docname="logo-facebook.svg"
+   inkscape:export-filename="C:\xampp\htdocs\ADMIN\controller\template\logo-facebook.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#999999"
+     borderopacity="1"
+     inkscape:pageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     units="px"
+     width="42.117px"
+     inkscape:zoom="7.5087439"
+     inkscape:cx="20.109888"
+     inkscape:cy="15.049122"
+     inkscape:window-width="1680"
+     inkscape:window-height="987"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Camada 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <ellipse
+       style="fill:none;fill-opacity:0.2;stroke:#2e4d87;stroke-width:0.664352;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path1276"
+       cx="5.5717282"
+       cy="5.5717282"
+       rx="5.2395382"
+       ry="5.2395391" />
+    <path
+       style="fill:#2e4d87;fill-opacity:1;stroke:#2e4d87;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 4.7281388,8.9331008 -0.003,-3.400811 -0.697651,0.0048 0.0015,-1.109651 0.658271,-0.01144 -0.0047,-1.212081 c 0.0092,-0.523539 0.425735,-0.967051 1.018669,-0.989345 l 1.408515,-0.0044 0.0058,1.245806 -1.03188,0.019 0.0088,0.957132 0.782091,2.15e-4 0.0026,1.109483 -0.786019,-3.29e-4 -0.01459,3.385567 z"
+       id="path1564"
+       sodipodi:nodetypes="cccccccccccccccc" />
+  </g>
+</svg>

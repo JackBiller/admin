@@ -5,10 +5,15 @@ ini_set('display_errors', 1);
 
 date_default_timezone_set('America/Sao_Paulo');
 
-if (is_file('../vendor/autoload.php')) require '../vendor/autoload.php';
+if (is_file(__DIR__ . '/../vendor/autoload.php'))
+	require_once __DIR__ . '/../vendor/autoload.php';
+
+if (is_file(__DIR__ . '/../biblioteca/dompdf/autoload.inc.php'))
+	require_once __DIR__ . '/../biblioteca/dompdf/autoload.inc.php';
 
 use Aws\S3\S3Client;
 use Aws\S3\Exception\S3Exception;
+use Dompdf\Dompdf;
 
 include "./constConfig.php";
 include "./funcoes.php";
